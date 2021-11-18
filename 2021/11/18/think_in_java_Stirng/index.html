@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives: 2021 | like winter</title>
+  <title>... | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/2021/index.html">
+  <meta name="description" content="String123456创建String的方式：String s &#x3D; &quot;abc&quot;,new String(),clone(),反射，反序列化Stirng是一个final类，why1.String是高度使用的一个类，如果可以继承可能会降低程序性能2.由于字符串常量池（这一点后面jvm中会详细说到）的存在，为了更有效的管理和优化字符串常量池里的对象，将String设计为不可变性3.安">
+<meta property="og:type" content="article">
+<meta property="og:title" content="...">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/11/18/think_in_java_Stirng/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="String123456创建String的方式：String s &#x3D; &quot;abc&quot;,new String(),clone(),反射，反序列化Stirng是一个final类，why1.String是高度使用的一个类，如果可以继承可能会降低程序性能2.由于字符串常量池（这一点后面jvm中会详细说到）的存在，为了更有效的管理和优化字符串常量池里的对象，将String设计为不可变性3.安">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-18T14:51:14.911Z">
+<meta property="article:modified_time" content="2021-11-18T15:17:23.942Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,130 +154,159 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-think_in_java_Stirng" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      ...
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/18/think_in_java_Stirng/" class="archive-article-date">
+
+        
+        <a href="/2021/11/18/think_in_java_Stirng/" class="archive-article-date">
   	<time datetime="2021-11-18T14:51:14.911Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-18</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/18/think_in_java_Stirng/">...</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">创建String的方式：String s = <span class="string">&quot;abc&quot;</span>,new String(),<span class="built_in">clone</span>(),反射，反序列化</span><br><span class="line">Stirng是一个final类，why</span><br><span class="line">1.String是高度使用的一个类，如果可以继承可能会降低程序性能</span><br><span class="line">2.由于字符串常量池（这一点后面jvm中会详细说到）的存在，为了更有效的管理和优化字符串常量池里的对象，将String设计为不可变性</span><br><span class="line">3.安全性考虑。因为使用字符串的场景非常多，设计成不可变可以有效的防止字符串被有意或者无意的篡改</span><br><span class="line">4.作为HashMap、HashTable等<span class="built_in">hash</span>型数据key的必要。因为不可变的设计，jvm底层很容易在缓存String对象的时候缓存其hashcode，这样在执行效率上会大大提升</span><br></pre></td></tr></table></figure>
+<h3 id="类定义"><a href="#类定义" class="headerlink" title="类定义"></a>类定义</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public final class String</span><br><span class="line">    implements java.io.Serializable, Comparable&lt;String&gt;, CharSequence &#123;</span><br><span class="line">		</span><br><span class="line">		// 存储用</span><br><span class="line">    private final char value[];</span><br><span class="line">		</span><br><span class="line">		// <span class="built_in">hash</span>是String实例化的hashcode的一个缓存。因为String经常被用于比较，比如在HashMap中。如果每次进行比较都重新计算hashcode的值的话，那无疑是比较麻烦的，而保存一个hashcode的缓存无疑能优化这样的操作</span><br><span class="line">    private int <span class="built_in">hash</span>; // Default to 0</span><br><span class="line">		</span><br><span class="line">    private static final long serialVersionUID = -6849794470754667710L;</span><br><span class="line"> 		</span><br><span class="line"> 		// transient是用于指定哪个字段不被默认序列化，对于不需要序列化的属性直接用transient修饰即可。而serialPersistentFields用于指定哪些字段需要被默认序列化</span><br><span class="line">    // 如果同时定义了serialPersistentFields与transient，transient会被忽略</span><br><span class="line">    private static final ObjectStreamField[] serialPersistentFields =</span><br><span class="line">        new ObjectStreamField[0];</span><br><span class="line">    // CASE_INSENSITIVE_ORDER，其根本就是持有一个静态内部类，用于忽略大小写得比较两个字符串   </span><br><span class="line">    public static final Comparator&lt;String&gt; CASE_INSENSITIVE_ORDER = new CaseInsensitiveComparator();</span><br><span class="line">    </span><br><span class="line">对于常见的几个实现</span><br><span class="line">java.io.Serializable：这个序列化接口没有任何方法和域，仅用于标识序列化的语意。</span><br><span class="line">Comparable&lt;String&gt;：这个接口只有一个compareTo(T 0)接口，用于对两个实例化对象比较大小。</span><br><span class="line">CharSequence：这个接口是一个只读的字符序列。包括length(), charAt(int index), subSequence(int start, int end)这几个API接口，StringBuffer和StringBuild也是实现了改接口。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 主要是代码复用</span><br><span class="line"> private static class CaseInsensitiveComparator</span><br><span class="line">            implements Comparator&lt;String&gt;, java.io.Serializable &#123;</span><br><span class="line">        private static final long serialVersionUID = 8575799808933029326L;</span><br><span class="line">        //不区分大小写比较</span><br><span class="line">        public int compare(String s1, String s2) &#123;</span><br><span class="line">            //获取s1和s2的长度</span><br><span class="line">            int n1 = s1.length();</span><br><span class="line">            int n2 = s2.length();</span><br><span class="line">            //min为n1和n2的较小值</span><br><span class="line">            int min = Math.min(n1, n2);</span><br><span class="line">            //按照字符串长度短的遍历</span><br><span class="line">            <span class="keyword">for</span> (int i = 0; i &lt; min; i++) &#123;</span><br><span class="line">                char c1 = s1.charAt(i);</span><br><span class="line">                char c2 = s2.charAt(i);</span><br><span class="line">                <span class="keyword">if</span> (c1 != c2) &#123;</span><br><span class="line">                //转换成大写字母</span><br><span class="line">                    c1 = Character.toUpperCase(c1);</span><br><span class="line">                    c2 = Character.toUpperCase(c2);</span><br><span class="line">                    <span class="keyword">if</span> (c1 != c2) &#123;</span><br><span class="line">                    //转成小写字母</span><br><span class="line">                        c1 = Character.toLowerCase(c1);</span><br><span class="line">                        c2 = Character.toLowerCase(c2);</span><br><span class="line">                        <span class="keyword">if</span> (c1 != c2) &#123;</span><br><span class="line">                        //小于0 说明s1&lt;s2</span><br><span class="line">                        //大于0 说明s1&gt;s2</span><br><span class="line">                            <span class="built_in">return</span> c1 - c2;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            //执行到这里说明字符串短的已经执行到结尾了</span><br><span class="line">            //那接下来就比较谁的字符串长度长了</span><br><span class="line">            //小于0 说明s1&lt;s2</span><br><span class="line">            //大于0 说明s1&gt;s2</span><br><span class="line">            //等于0 说明s1==s2</span><br><span class="line">            <span class="built_in">return</span> n1 - n2;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        private Object <span class="function"><span class="title">readResolve</span></span>() &#123; <span class="built_in">return</span> CASE_INSENSITIVE_ORDER; &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="length"><a href="#length" class="headerlink" title="length()"></a>length()</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public int <span class="function"><span class="title">length</span></span>() &#123;</span><br><span class="line">//字符串长度即数组value的长度</span><br><span class="line">        <span class="built_in">return</span> value.length;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean <span class="function"><span class="title">isEmpty</span></span>() &#123;</span><br><span class="line">    //数组长度为0则说明字符串是否为空</span><br><span class="line">        <span class="built_in">return</span> value.length == 0;</span><br><span class="line">    &#125;</span><br><span class="line">    //返回索引位置的字符</span><br><span class="line">    public char charAt(int index) &#123;</span><br><span class="line">    //判断索引是否越界 </span><br><span class="line">        <span class="keyword">if</span> ((index &lt; 0) || (index &gt;= value.length)) &#123;</span><br><span class="line">        //越界抛出异常</span><br><span class="line">            throw new StringIndexOutOfBoundsException(index);</span><br><span class="line">        &#125;</span><br><span class="line">        //返回索引位置的字符 </span><br><span class="line">        <span class="built_in">return</span> value[index];</span><br><span class="line">    &#125;</span><br><span class="line">String的底层是char数组，所以length()，isEmpty()，charAt()这些方法其实就是在内部调用数组的方法</span><br></pre></td></tr></table></figure>
+<h3 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+      
 
-        <div class="article-info info-on-right">
-          
-          
-
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2021/11/18/think_in_java_Stirng/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/17/think_in_java_Integer/" class="archive-article-date">
-  	<time datetime="2021-11-17T14:53:56.268Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-17</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2021/11/17/think_in_java_Integer/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">java 包装类</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/17/think_in_java_Integer/">java 包装类</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/17/think_in_java_1/" class="archive-article-date">
-  	<time datetime="2021-11-17T13:32:20.922Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/17/think_in_java_1/">java 基础篇</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/24/plain/" class="archive-article-date">
-  	<time datetime="2021-01-24T03:16:37.294Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/24/plain/">冬天总要干点什么</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -296,8 +329,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives: 2021 | like winter</title>
+  <title>java 包装类 | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/2021/index.html">
+  <meta name="description" content="Intger类的定义1234567891011121314151617public final class Integer extends Number implements Comparable&lt;Integer&gt; &amp;#123;			&#x2F;&#x2F; -2147483648     @Native public static final int   MIN_VALUE &#x3D; 0x80000000;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java 包装类">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/11/17/think_in_java_Integer/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="Intger类的定义1234567891011121314151617public final class Integer extends Number implements Comparable&lt;Integer&gt; &amp;#123;			&#x2F;&#x2F; -2147483648     @Native public static final int   MIN_VALUE &#x3D; 0x80000000;">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-17T14:53:56.268Z">
+<meta property="article:modified_time" content="2021-11-18T14:46:45.433Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,130 +154,168 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-think_in_java_Integer" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/18/think_in_java_Stirng/" class="archive-article-date">
-  	<time datetime="2021-11-18T14:51:14.911Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-18</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/18/think_in_java_Stirng/">...</a>
+    <h1 class="article-title" itemprop="name">
+      java 包装类
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/17/think_in_java_Integer/" class="archive-article-date">
+        
+        <a href="/2021/11/17/think_in_java_Integer/" class="archive-article-date">
   	<time datetime="2021-11-17T14:53:56.268Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-17</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/17/think_in_java_Integer/">java 包装类</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Intger"><a href="#Intger" class="headerlink" title="Intger"></a>Intger</h2><h3 id="类的定义"><a href="#类的定义" class="headerlink" title="类的定义"></a>类的定义</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public final class Integer extends Number implements Comparable&lt;Integer&gt; &#123;</span><br><span class="line">	</span><br><span class="line">		// -2147483648 </span><br><span class="line">    @Native public static final int   MIN_VALUE = 0x80000000;</span><br><span class="line"></span><br><span class="line">    // 2147483647</span><br><span class="line">    @Native public static final int   MAX_VALUE = 0x7fffffff;</span><br><span class="line">    </span><br><span class="line">		// 原始类型的实例int</span><br><span class="line">		public static final Class&lt;Integer&gt;  TYPE = (Class&lt;Integer&gt;) Class.getPrimitiveClass(<span class="string">&quot;int&quot;</span>);</span><br><span class="line"></span><br><span class="line">1.是final修饰的常量类</span><br><span class="line">2.Integer 类继承了 Number 类和实现了 Comparable 接口</span><br><span class="line">Number 类是一个抽象类，JDK8中基本数据类型的包装类除了Character 和 Boolean 没有继承该类外，剩下的都继承了 Number 类，</span><br><span class="line">该类的方法用于各种数据类型的转换 shortValue()、byteValue()、doubleValue()、floatValue()、longValue()、intValue()</span><br><span class="line">Comparable接口就一个compareTo 方法，用于元素之间的大小比较。</span><br><span class="line">3.MIN_VALUE、MAX_VALUE定义了值的范围</span><br></pre></td></tr></table></figure>
+<h3 id="compareTo方法"><a href="#compareTo方法" class="headerlink" title="compareTo方法"></a>compareTo方法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public int compareTo(Integer anotherInteger) &#123;</span><br><span class="line">    <span class="built_in">return</span> compare(this.value, anotherInteger.value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * jdk1.7之后单独抽取出来的static方法，可以作为工具方法用于比较两个整数</span><br><span class="line"> */</span><br><span class="line">public static int compare(int x, int y) &#123;</span><br><span class="line">    <span class="built_in">return</span> (x &lt; y) ? -1 : ((x == y) ? 0 : 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="toString-int"><a href="#toString-int" class="headerlink" title="toString(int)"></a>toString(int)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">public static String toString(int i) &#123;</span><br><span class="line">    // 如果是Integer的最小值，直接返回字符串<span class="string">&quot;-2147483648&quot;</span></span><br><span class="line">    <span class="keyword">if</span> (i == Integer.MIN_VALUE)</span><br><span class="line">        <span class="built_in">return</span> <span class="string">&quot;-2147483648&quot;</span>;</span><br><span class="line">    // 计算形参i的位数，负数的话，size要比数字本身多1，用来存储负号(-)</span><br><span class="line">    int size = (i &lt; 0) ? stringSize(-i) + 1 : stringSize(i);</span><br><span class="line">    // 构造一个用于存储数字的字符数组</span><br><span class="line">    char[] buf = new char[size];</span><br><span class="line">    // 填充字符数组</span><br><span class="line">    getChars(i, size, buf);</span><br><span class="line">    <span class="built_in">return</span> new String(buf, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stringSzie方法</span><br><span class="line">final static int [] sizeTable = &#123; 9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999, Integer.MAX_VALUE &#125;;</span><br><span class="line"></span><br><span class="line">// 要求形参x为正数</span><br><span class="line">static int stringSize(int x) &#123;</span><br><span class="line">    // 一个个和sizeTable比较，到第i个数代表x由(i+1)个数字组成</span><br><span class="line">    <span class="keyword">for</span> (int i=0; ; i++)</span><br><span class="line">        <span class="keyword">if</span> (x &lt;= sizeTable[i])</span><br><span class="line">            <span class="built_in">return</span> i+1;</span><br><span class="line">&#125;</span><br><span class="line">getChars</span><br><span class="line">static void getChars(int i, int index, char[] buf) &#123;</span><br><span class="line">    int q, r;// r为余数，就是每次被插入到buf的数</span><br><span class="line">    int charPos = index;// buf可插入尾部</span><br><span class="line">    char sign = 0;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (i &lt; 0) &#123;</span><br><span class="line">        sign = <span class="string">&#x27;-&#x27;</span>;</span><br><span class="line">        i = -i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // i &gt;= 65536时</span><br><span class="line">    // 每次迭代向buf插入2个数字，即i的最后两位，目的应该是加快迭代速度</span><br><span class="line">    <span class="keyword">while</span> (i &gt;= 65536) &#123;</span><br><span class="line">        q = i / 100;</span><br><span class="line">        // really: r = i - (q * 100);</span><br><span class="line">        // 本质就是r = i - (q * 100)</span><br><span class="line">        // q &lt;&lt; <span class="string">6 = 2^6</span> = 64</span><br><span class="line">        // q &lt;&lt; <span class="string">5 = 2^5</span> = 32</span><br><span class="line">        // q &lt;&lt; <span class="string">2 = 2</span>^2 = 4</span><br><span class="line">        // i - q * 100 得到的r就是i的末尾2位数，本质是i%100，应该是乘法运算速度大于除法，大于求余，但是减法的速度应该也不算快</span><br><span class="line">        r = i - ((q &lt;&lt; <span class="string">6) + (q &lt;&lt; 5) + (q &lt;&lt; 2));</span></span><br><span class="line"><span class="string">        i = q;</span></span><br><span class="line"><span class="string">        // 插入r的个位数</span></span><br><span class="line"><span class="string">        buf [--charPos] = DigitOnes[r];</span></span><br><span class="line"><span class="string">        // 插入r的十位数</span></span><br><span class="line"><span class="string">        buf [--charPos] = DigitTens[r];</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    // Fall thru to fast mode for smaller numbers</span></span><br><span class="line"><span class="string">    // assert(i &lt;= 65536, i);</span></span><br><span class="line"><span class="string">    for (;;) &#123;</span></span><br><span class="line"><span class="string">        // 这里本质就是i/10，</span></span><br><span class="line"><span class="string">        q = (i * 52429) &gt;&gt;&gt; (16+3);</span></span><br><span class="line"><span class="string">        r = i - ((q &lt;&lt; 3) + (q &lt;&lt; 1));  // 本质就是 r = i-(q*10)</span></span><br><span class="line"><span class="string">        buf [--charPos] = digits [r];// 将数字r转成字符&#x27;r&#x27;，然后添加到buf的可插入尾部</span></span><br><span class="line"><span class="string">        i = q;</span></span><br><span class="line"><span class="string">        if (i == 0) break;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">    if (sign != 0) &#123;// 如果是负数，再插入&#x27;-&#x27;</span></span><br><span class="line"><span class="string">        buf [--charPos] = sign;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">上面比较巧妙地地方1.分段：分成&gt;=65535和&lt;65535两段</span></span><br><span class="line"><span class="string">2.&lt;65535这部分，对于q = (i * 52429) &gt;&gt;&gt; (16+3);这个代码等价于q = i / 10;，应该是ALU执行乘法和移位运算的速度快过除法的运算速度。但是为什么是52429和2^19 (2的19次方，无符号右移19位相当于除以2的19次方)，这是出于精度同时不会溢出这两方面考虑的。首先说精度方面，(double)52429/524288=0.100000381469，这个精度完全可以保证求出i的十分之一，比如选了一个精度不够的，求出值为0.103，那么如果i是999，999*0.103=102,并不是999的十分之一99；另外一方面，65536=2^16，52429&lt;65536，所以i * 52429 &lt; 2^32，不会溢出，至于i * 52429 会导致结果变成负数的问题，这只是中间结果，无符号右移19位之后，高位全部补0，结果q还是正数</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+<h3 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf()"></a>valueOf()</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line">看valueOf方法之前，需要先看看IntegerCache，顾名思义，这个是整数的缓存，默认情况下，IntegetCache会缓存[-128, 127]的所有实例，所以正常情况下，在这两个值范围内的对象都是相等的(==返回<span class="literal">true</span>)，因为它们引用的是同一块内存上的对象，有点单例的意思，当然可以通过启动参数-XX:AutoBoxCacheMax=size来修改缓存的内容(size必须大于127，否则当成127)来让jvm缓存[-size-1, size]的对象</span><br><span class="line">private static class IntegerCache &#123;</span><br><span class="line">        static final int low = -128;</span><br><span class="line">        static final int high;</span><br><span class="line">        static final Integer cache[];</span><br><span class="line"></span><br><span class="line">        static &#123;</span><br><span class="line">            // high value may be configured by property</span><br><span class="line">            int h = 127;</span><br><span class="line">            String integerCacheHighPropValue =</span><br><span class="line">                sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (integerCacheHighPropValue != null) &#123;</span><br><span class="line">                int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                i = Math.max(i, 127);// 如果配置的值比127小，缓存上界还是127</span><br><span class="line">                // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">                h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">            &#125;</span><br><span class="line">            high = h;</span><br><span class="line"></span><br><span class="line">            cache = new Integer[(high - low) + 1];</span><br><span class="line">            int j = low;</span><br><span class="line">            // 对象一个个缓存起来，用cache数组保存</span><br><span class="line">            <span class="keyword">for</span>(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = new Integer(j++);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        private <span class="function"><span class="title">IntegerCache</span></span>() &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">valueOf方法</span><br><span class="line">public static Integer valueOf(String s, int radix) throws NumberFormatException &#123;</span><br><span class="line">  <span class="built_in">return</span> Integer.valueOf(parseInt(s,radix));</span><br><span class="line">&#125;</span><br><span class="line">public static Integer valueOf(String s) throws NumberFormatException &#123;</span><br><span class="line">  <span class="built_in">return</span> Integer.valueOf(parseInt(s, 10));</span><br><span class="line">&#125;</span><br><span class="line">public static Integer valueOf(int i) &#123;</span><br><span class="line">  assert IntegerCache.high &gt;= 127;// 防止IntegetCache函数上界不是127</span><br><span class="line">  // 在[IntegetCache.low, Integer.high]直接的直接从缓存中返回</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">    <span class="built_in">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">  <span class="built_in">return</span> new Integer(i);// 否则新建一个实例</span><br><span class="line">&#125;</span><br><span class="line">上面调用到了parseInt(String, int)方法，是常用方法parseInt(String)的实现</span><br><span class="line">/**</span><br><span class="line"> * 整个过程的关键点都在判断下一次迭代会不会导致溢出</span><br><span class="line"> * </span><br><span class="line"> */</span><br><span class="line">public static int parseInt(String s, int radix)</span><br><span class="line">            throws NumberFormatException</span><br><span class="line">&#123;</span><br><span class="line">    /*</span><br><span class="line">     * WARNING: This method may be invoked early during VM initialization</span><br><span class="line">     * before IntegerCache is initialized. Care must be taken to not use</span><br><span class="line">     * the valueOf method.</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    // 下面都是判断s不能为空，进制必须在[2, 36]</span><br><span class="line">    <span class="keyword">if</span> (s == null) &#123;</span><br><span class="line">        throw new NumberFormatException(<span class="string">&quot;null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (radix &lt; Character.MIN_RADIX) &#123;</span><br><span class="line">        throw new NumberFormatException(<span class="string">&quot;radix &quot;</span> + radix +</span><br><span class="line">                                        <span class="string">&quot; less than Character.MIN_RADIX&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (radix &gt; Character.MAX_RADIX) &#123;</span><br><span class="line">        throw new NumberFormatException(<span class="string">&quot;radix &quot;</span> + radix +</span><br><span class="line">                                        <span class="string">&quot; greater than Character.MAX_RADIX&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 当前的转换结果</span><br><span class="line">    int result = 0;</span><br><span class="line">    // 后面的处理都基于负数处理，一方面是统一规则，另外Integer.MIN_VALUE的绝对值比较大</span><br><span class="line">    boolean negative = <span class="literal">false</span>;</span><br><span class="line">    int i = 0, len = s.length();</span><br><span class="line">    // 后面两个参数限制溢出的作用</span><br><span class="line">    int <span class="built_in">limit</span> = -Integer.MAX_VALUE;</span><br><span class="line">    // 界定溢出，具体看下面的注释</span><br><span class="line">    int multmin;</span><br><span class="line">    // 通过Character<span class="comment">#digit转换过来的数值</span></span><br><span class="line">    int digit;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (len &gt; 0) &#123;</span><br><span class="line">        // 处理第一个字符</span><br><span class="line">        char firstChar = s.charAt(0);</span><br><span class="line">        <span class="keyword">if</span> (firstChar &lt; <span class="string">&#x27;0&#x27;</span>) &#123; // Possible leading <span class="string">&quot;+&quot;</span> or <span class="string">&quot;-&quot;</span></span><br><span class="line">            <span class="keyword">if</span> (firstChar == <span class="string">&#x27;-&#x27;</span>) &#123;</span><br><span class="line">                negative = <span class="literal">true</span>;</span><br><span class="line">                // 如果是负数，溢出标志变成Integer.MIN_VALUE</span><br><span class="line">                <span class="built_in">limit</span> = Integer.MIN_VALUE;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (firstChar != <span class="string">&#x27;+&#x27;</span>)</span><br><span class="line">                throw NumberFormatException.forInputString(s);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (len == 1) // Cannot have lone <span class="string">&quot;+&quot;</span> or <span class="string">&quot;-&quot;</span></span><br><span class="line">                throw NumberFormatException.forInputString(s);</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        // 界定是否溢出的标志，假设10进制最大是211，则multmin = 211 / 10 = 21，假设现在result为30，那么下一次迭代result *= radix肯定会大于211，溢出了。</span><br><span class="line">        multmin = <span class="built_in">limit</span> / radix;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; len) &#123;</span><br><span class="line">            // Accumulating negatively avoids surprises near MAX_VALUE</span><br><span class="line">            // 转换函数，具体在Character类了解</span><br><span class="line">            digit = Character.digit(s.charAt(i++),radix);</span><br><span class="line">            <span class="keyword">if</span> (digit &lt; 0) &#123;</span><br><span class="line">                throw NumberFormatException.forInputString(s);</span><br><span class="line">            &#125;</span><br><span class="line">            // 因为是当成负数(<span class="built_in">limit</span>是负数)处理，相当于正数的result &gt; multmin</span><br><span class="line">            <span class="keyword">if</span> (result &lt; multmin) &#123;</span><br><span class="line">                throw NumberFormatException.forInputString(s);</span><br><span class="line">            &#125;</span><br><span class="line">            result *= radix;// 迭代，就是套公式a * radix^(n-1)的过程</span><br><span class="line">            // 同样是判断溢出的过程，继续上面的分析，result现在是210，如果digit是2，则转换后的result = 212，也是溢出了。</span><br><span class="line">            <span class="keyword">if</span> (result &lt; <span class="built_in">limit</span> + digit) &#123;</span><br><span class="line">                throw NumberFormatException.forInputString(s);</span><br><span class="line">            &#125;</span><br><span class="line">            result -= digit;// 公式里相加的过程，负数的话就是减</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        throw NumberFormatException.forInputString(s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> negative ? result : -result;</span><br><span class="line">&#125;</span><br><span class="line">// 这个就是调用上面的方法</span><br><span class="line">public static int parseInt(String s) throws NumberFormatException &#123;</span><br><span class="line">  <span class="built_in">return</span> parseInt(s,10);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、Integer中进制的转换比较枯燥，有兴趣可以去看看，digits数组代表的是进制符号，最大为10+26=36进制</span><br><span class="line">2、16进制、8进制、2进制转化都是转化成无符号的进制数。先计算出位数，创建对应的字符数组，位运算计算出每一位的值，并获取值对应的字符，任何创建字符串返回。</span><br><span class="line">3、stringSize:int有几位，巧妙的使用数组比较来获取位数，而不是除法来</span><br><span class="line">4、IntegerCache 整形缓存，默认创建-128~127的Integer对象。可以通过JVM来设置，通过valueOf来获取</span><br><span class="line">说起来，Atomic包下有AtomicInteger这个类，等多线程那块也会看看....</span><br></pre></td></tr></table></figure>
+      
 
-        <div class="article-info info-on-right">
-          
-          
-
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2021/11/17/think_in_java_Integer/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/17/think_in_java_1/" class="archive-article-date">
-  	<time datetime="2021-11-17T13:32:20.922Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-17</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2021/11/18/think_in_java_Stirng/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          ...
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/11/17/think_in_java_1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">java 基础篇</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/17/think_in_java_1/">java 基础篇</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/24/plain/" class="archive-article-date">
-  	<time datetime="2021-01-24T03:16:37.294Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/24/plain/">冬天总要干点什么</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -296,8 +338,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
