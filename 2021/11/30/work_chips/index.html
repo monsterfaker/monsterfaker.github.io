@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>ArrayList源码瞎看 | like winter</title>
+  <title>碎片 | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="为啥要这玩意1我们在存储多个元素时，如果元素个数固定，那么可以使用数组即可，但是在需要存储的元素个数不确定时，这时候数组可以出现数据下标越界的情况，数组对于动态元素添加显得无能为力，而ArrayList可以根据实际元素个数的变化而动态扩容，弥补了数组的局限性 类的声明1234567891011121314151617181920212223242526272829303132333435&#x2F;&#x2F; 具备">
+  <meta name="description" content="一些工作的上碎片，每天坚持更新 11-27123456789101112131415周六加班：AppInfo性能环境切gussdb之后TPS下降显著，RT增加分析了一下，工具用的arthas，arthas环境安装，JDK安装，环境变量配置arthas使用 java -jar arthas-boot.jar 注意路径会出来对应可监控进程，选择进入（注意当前用户必须跟进程用户一致，否则无法跟踪）先分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ArrayList源码瞎看">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/11/29/think_in_java_ArrayList/index.html">
+<meta property="og:title" content="碎片">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/11/30/work_chips/index.html">
 <meta property="og:site_name" content="like winter">
-<meta property="og:description" content="为啥要这玩意1我们在存储多个元素时，如果元素个数固定，那么可以使用数组即可，但是在需要存储的元素个数不确定时，这时候数组可以出现数据下标越界的情况，数组对于动态元素添加显得无能为力，而ArrayList可以根据实际元素个数的变化而动态扩容，弥补了数组的局限性 类的声明1234567891011121314151617181920212223242526272829303132333435&#x2F;&#x2F; 具备">
+<meta property="og:description" content="一些工作的上碎片，每天坚持更新 11-27123456789101112131415周六加班：AppInfo性能环境切gussdb之后TPS下降显著，RT增加分析了一下，工具用的arthas，arthas环境安装，JDK安装，环境变量配置arthas使用 java -jar arthas-boot.jar 注意路径会出来对应可监控进程，选择进入（注意当前用户必须跟进程用户一致，否则无法跟踪）先分析">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-11-29T15:28:53.874Z">
-<meta property="article:modified_time" content="2021-11-29T15:55:15.152Z">
+<meta property="article:published_time" content="2021-11-29T16:07:49.432Z">
+<meta property="article:modified_time" content="2021-11-29T16:30:28.696Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -154,32 +154,29 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-think_in_java_ArrayList" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-work_chips" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      ArrayList源码瞎看
+      碎片
     </h1>
   
 
         
-        <a href="/2021/11/29/think_in_java_ArrayList/" class="archive-article-date">
-  	<time datetime="2021-11-29T15:28:53.874Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-29</time>
+        <a href="/2021/11/30/work_chips/" class="archive-article-date">
+  	<time datetime="2021-11-29T16:07:49.432Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="为啥要这玩意"><a href="#为啥要这玩意" class="headerlink" title="为啥要这玩意"></a>为啥要这玩意</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我们在存储多个元素时，如果元素个数固定，那么可以使用数组即可，但是在需要存储的元素个数不确定时，这时候数组可以出现数据下标越界的情况，数组对于动态元素添加显得无能为力，而ArrayList可以根据实际元素个数的变化而动态扩容，弥补了数组的局限性</span><br></pre></td></tr></table></figure>
-<h3 id="类的声明"><a href="#类的声明" class="headerlink" title="类的声明"></a>类的声明</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// 具备List的特性（extends AbstractList），同时支持随机访问（RandomAccess），原生支持序列化（Serializable）</span><br><span class="line">public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt;</span><br><span class="line">        implements List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable</span><br><span class="line">&#123;</span><br><span class="line">    private static final long serialVersionUID = 8683452581122892189L;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 默认初始化大小</span><br><span class="line">     */</span><br><span class="line">    private static final int DEFAULT_CAPACITY = 10;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 用于空实例的共享空数组实例，初始化元素个数为0，或者容量为0使用</span><br><span class="line">     */</span><br><span class="line">    private static final Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 给无参构造方法用的</span><br><span class="line">     */</span><br><span class="line">    private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 实际存储，底层结构</span><br><span class="line">     */</span><br><span class="line">    transient Object[] elementData; // non-private to simplify nested class access</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 元素个数</span><br><span class="line">     *</span><br><span class="line">     * @serial</span><br><span class="line">     */</span><br><span class="line">    private int size;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
-<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">		public <span class="function"><span class="title">ArrayList</span></span>() &#123;</span><br><span class="line">        this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public ArrayList(int initialCapacity) &#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; 0) &#123;</span><br><span class="line">            this.elementData = new Object[initialCapacity];</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == 0) &#123;</span><br><span class="line">            this.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            throw new IllegalArgumentException(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public ArrayList(Collection&lt;? extends E&gt; c) &#123;</span><br><span class="line">        elementData = c.toArray();</span><br><span class="line">        <span class="keyword">if</span> ((size = elementData.length) != 0) &#123;</span><br><span class="line">            // c.toArray might (incorrectly) not <span class="built_in">return</span> Object[] (see 6260652)</span><br><span class="line">            <span class="keyword">if</span> (elementData.getClass() != Object[].class)</span><br><span class="line">                elementData = Arrays.copyOf(elementData, size, Object[].class);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            // replace with empty array.</span><br><span class="line">            this.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">很简单 略</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="未完待续-1"><a href="#未完待续-1" class="headerlink" title="未完待续"></a>未完待续</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+        <p>一些工作的上碎片，每天坚持更新</p>
+<h3 id="11-27"><a href="#11-27" class="headerlink" title="11-27"></a>11-27</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">周六加班：AppInfo性能环境切gussdb之后TPS下降显著，RT增加</span><br><span class="line">分析了一下，工具用的arthas，</span><br><span class="line">arthas环境安装，JDK安装，环境变量配置</span><br><span class="line">arthas使用 java -jar arthas-boot.jar 注意路径</span><br><span class="line">会出来对应可监控进程，选择进入（注意当前用户必须跟进程用户一致，否则无法跟踪）</span><br><span class="line">先分析代码，找出核心方法 使用trace 类 方法 命令跟踪</span><br><span class="line">会得到核心方法中的方法处理耗时（两个查库dao耗时很高，sql在数据库单独查询耗时并不高）</span><br><span class="line">sql是否可优化，索引？，数据库计算转换为内存计算（不用函数）？个人感觉sql没啥问题，可优化性不高且slowSQL.log没有打印--&gt;慢sql调优</span><br><span class="line">比较切库前后的表结构，索引等 explain sql 耗时相差不大</span><br><span class="line">sql没问题，表没问题：考虑是库的问题，初步定位：1.网络耗时（云库不在同一网络）2.数据库CPU使用过高（查看了云数据库的监控日志，压测分析时，确实CPU冲高了）</span><br><span class="line">结论：公司要省钱，切的云库给的资源很少，只能从代码优化，增加缓存，不是常用接口，缓存时间设置的尽量短</span><br><span class="line">碎片：系统性文档输出 记住</span><br><span class="line">2.编码问题</span><br><span class="line">面临一个场景 <span class="built_in">continue</span>.....</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
       
 
       
@@ -258,7 +255,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2021/11/29/think_in_java_ArrayList/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2021/11/30/work_chips/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -272,18 +269,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/11/30/work_chips/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          碎片
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/11/18/think_in_java_Stirng/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Stirng入门</div>
+    <a href="/2021/11/29/think_in_java_ArrayList/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ArrayList源码瞎看</div>
       <i class="icon-circle-right"></i>
     </a>
   

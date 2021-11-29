@@ -152,6 +152,70 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-work_chips" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/11/30/work_chips/">碎片</a>
+    </h1>
+  
+
+        
+        <a href="/2021/11/30/work_chips/" class="archive-article-date">
+  	<time datetime="2021-11-29T16:07:49.432Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一些工作的上碎片，每天坚持更新</p>
+<h3 id="11-27"><a href="#11-27" class="headerlink" title="11-27"></a>11-27</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">周六加班：AppInfo性能环境切gussdb之后TPS下降显著，RT增加</span><br><span class="line">分析了一下，工具用的arthas，</span><br><span class="line">arthas环境安装，JDK安装，环境变量配置</span><br><span class="line">arthas使用 java -jar arthas-boot.jar 注意路径</span><br><span class="line">会出来对应可监控进程，选择进入（注意当前用户必须跟进程用户一致，否则无法跟踪）</span><br><span class="line">先分析代码，找出核心方法 使用trace 类 方法 命令跟踪</span><br><span class="line">会得到核心方法中的方法处理耗时（两个查库dao耗时很高，sql在数据库单独查询耗时并不高）</span><br><span class="line">sql是否可优化，索引？，数据库计算转换为内存计算（不用函数）？个人感觉sql没啥问题，可优化性不高且slowSQL.log没有打印--&gt;慢sql调优</span><br><span class="line">比较切库前后的表结构，索引等 explain sql 耗时相差不大</span><br><span class="line">sql没问题，表没问题：考虑是库的问题，初步定位：1.网络耗时（云库不在同一网络）2.数据库CPU使用过高（查看了云数据库的监控日志，压测分析时，确实CPU冲高了）</span><br><span class="line">结论：公司要省钱，切的云库给的资源很少，只能从代码优化，增加缓存，不是常用接口，缓存时间设置的尽量短</span><br><span class="line">碎片：系统性文档输出 记住</span><br><span class="line">2.编码问题</span><br><span class="line">面临一个场景 <span class="built_in">continue</span>.....</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/11/30/work_chips/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-think_in_java_ArrayList" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
