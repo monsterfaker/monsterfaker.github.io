@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives: 2021/12 | like winter</title>
+  <title>工厂方法模式 | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/2021/12/index.html">
+  <meta name="description" content="代码是最好的解释12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273package design.create;&#x2F;** * @author TylerpxRao@gmail.co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工厂方法模式">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/12/08/factoryMethod/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="代码是最好的解释12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273package design.create;&#x2F;** * @author TylerpxRao@gmail.co">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-08T15:19:10.646Z">
+<meta property="article:modified_time" content="2021-12-08T15:22:27.440Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,130 +154,157 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-factoryMethod" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      工厂方法模式
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/08/factoryMethod/" class="archive-article-date">
+
+        
+        <a href="/2021/12/08/factoryMethod/" class="archive-article-date">
   	<time datetime="2021-12-08T15:19:10.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-08</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/08/factoryMethod/">工厂方法模式</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="代码是最好的解释"><a href="#代码是最好的解释" class="headerlink" title="代码是最好的解释"></a>代码是最好的解释</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">package design.create;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author TylerpxRao@gmail.com</span><br><span class="line"> * @date 2021/12/8 22:11</span><br><span class="line"> */</span><br><span class="line">public class FactoryMethodPattern &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        LoggerFactory loggerFactory;</span><br><span class="line">        Logger logger;</span><br><span class="line">        // 当需要切换记录日志模式时，此处需要修改代码，不符合开闭原则-&gt;可以通过反射配合配置文件实现</span><br><span class="line">        //loggerFactory = new FileLoggerFactory();</span><br><span class="line">        // 有logger配置文件logger.config-</span><br><span class="line">        //&lt;config&gt;</span><br><span class="line">        //&lt;className&gt;design.create.FileLoggerFactory&lt;/className&gt;</span><br><span class="line">        //&lt;/config&gt;</span><br><span class="line">        loggerFactory = (LoggerFactory)XmlUtil.getBean();</span><br><span class="line">        logger = loggerFactory.createLogger();</span><br><span class="line">        logger.writeLog();</span><br><span class="line"></span><br><span class="line">        // 工厂方法对客户端隐藏,直接使用工厂对象来调用产品对象的方法</span><br><span class="line">        // loggerFactory.write()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interface LoggerFactory &#123;</span><br><span class="line">    // 抽象工厂方法</span><br><span class="line">    public Logger createLogger();</span><br><span class="line">    // 抽象工程支持重载，用于后续不同场景的拓展,例如 数据库记录日志需要传入数据库连接信息等</span><br><span class="line">    // public Logger createLogger(String args);</span><br><span class="line"></span><br><span class="line">    // 工厂方法的隐藏，对客户端隐藏，只需要将接口修改成抽象类，直接调用write写入日志</span><br><span class="line">//    public void <span class="function"><span class="title">write</span></span>() &#123;</span><br><span class="line">//        Logger logger = this.createLogger();</span><br><span class="line">//        logger.writeLog();</span><br><span class="line">//    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class FileLoggerFactory implements LoggerFactory &#123;</span><br><span class="line">    public Logger <span class="function"><span class="title">createLogger</span></span>() &#123;</span><br><span class="line">        // 创建文件日志记录对象</span><br><span class="line">        Logger logger = new FileLogger();</span><br><span class="line">        <span class="built_in">return</span> logger;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DatabaseLoggerFactory implements LoggerFactory &#123;</span><br><span class="line">    public Logger <span class="function"><span class="title">createLogger</span></span>() &#123;</span><br><span class="line">        // 创建数据库日志记录对象</span><br><span class="line">        Logger logger = new DataBaseLogger();</span><br><span class="line">        // 各种数据库操作...</span><br><span class="line">        <span class="built_in">return</span> logger;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface Logger &#123;</span><br><span class="line">    public void writeLog();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class FileLogger implements Logger &#123;</span><br><span class="line">    public void <span class="function"><span class="title">writeLog</span></span>() &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;文件日志记录&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DataBaseLogger implements Logger &#123;</span><br><span class="line">    public void <span class="function"><span class="title">writeLog</span></span>() &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;数据库日志记录&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="xml文件读取模拟工具类"><a href="#xml文件读取模拟工具类" class="headerlink" title="xml文件读取模拟工具类"></a>xml文件读取模拟工具类</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">package design.create;</span><br><span class="line"></span><br><span class="line">import org.w3c.dom.Document;</span><br><span class="line">import org.w3c.dom.Node;</span><br><span class="line">import org.w3c.dom.NodeList;</span><br><span class="line"></span><br><span class="line">import javax.xml.parsers.DocumentBuilder;</span><br><span class="line">import javax.xml.parsers.DocumentBuilderFactory;</span><br><span class="line">import java.io.File;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author TylerpxRao@gmail.com</span><br><span class="line"> * @date 2021/12/8 22:32</span><br><span class="line"> */</span><br><span class="line">public class XmlUtil &#123;</span><br><span class="line">    public static Object <span class="function"><span class="title">getBean</span></span>() &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            // 创建dom文件对象</span><br><span class="line">            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();</span><br><span class="line">            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();</span><br><span class="line">            Document document;</span><br><span class="line">            // 文件对象</span><br><span class="line">            document = documentBuilder.parse(new File(<span class="string">&quot;src//design//create//logger.config&quot;</span>));</span><br><span class="line">            // 获取包含类名的文本节点</span><br><span class="line">            NodeList nodeList = document.getElementsByTagName(<span class="string">&quot;className&quot;</span>);</span><br><span class="line">            Node node = nodeList.item(0).getFirstChild();</span><br><span class="line">            String cName = node.getNodeValue();</span><br><span class="line">            // 通过类名生成对象</span><br><span class="line">            Class clazz= Class.forName(cName);</span><br><span class="line">            Object obj = clazz.newInstance();</span><br><span class="line">            <span class="built_in">return</span> obj;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            e.getMessage();</span><br><span class="line">            <span class="built_in">return</span> null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="小结–统一总结"><a href="#小结–统一总结" class="headerlink" title="小结–统一总结"></a>小结–统一总结</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">具体总结 感觉需要理清 画个图  最好把类图也画出来</span><br><span class="line">netty也开始了，先写了最简单的客户端 服务器通讯的demo 明天整理上传</span><br></pre></td></tr></table></figure>
+      
 
-        <div class="article-info info-on-right">
-          
-          
-
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2021/12/08/factoryMethod/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/06/designMoedl/" class="archive-article-date">
-  	<time datetime="2021-12-06T14:34:17.834Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-06</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2021/12/06/designMoedl/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">二十三种设计模式</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/06/designMoedl/">二十三种设计模式</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/02/redBlackTree/" class="archive-article-date">
-  	<time datetime="2021-12-02T13:47:16.011Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/02/redBlackTree/">hashmap中的红黑树</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/01/hashmap/" class="archive-article-date">
-  	<time datetime="2021-12-01T12:48:50.923Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/01/hashmap/">hashmap</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -296,8 +327,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

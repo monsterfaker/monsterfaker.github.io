@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
   <title>二十三种设计模式 | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="java集合里面，我觉得最有必要看的源码就是hashmap，其他的后面有机会再看看，比如Linkedhashmap，tree相关的把亮怀的设计模式的书借来看了看，后面一边总结设计模式 分类12345678910111213141516设计模式的基本要素：名称、问题、解决方案、效果。GOF目前分类创建型：4结构型：8行为型：10遵循原则面向对象设计单一职责原则开闭原则里氏替换原则依赖倒转原则接口隔离">
+  <meta name="description" content="java集合里面，我觉得最有必要看的源码就是hashmap，其他的后面有机会再看看，比如Linkedhashmap，tree相关的把亮怀的设计模式的书借来看了看，后面一边总结设计模式 分类12345678910111213141516设计模式的基本要素：名称、问题、解决方案、效果。GOF目前分类创建型：4结构型：8行为型：10遵循原则面向对象设计单一职责原则:一个对象应该只包含单一的职责，并且该职">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二十三种设计模式">
 <meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/12/06/designMoedl/index.html">
 <meta property="og:site_name" content="like winter">
-<meta property="og:description" content="java集合里面，我觉得最有必要看的源码就是hashmap，其他的后面有机会再看看，比如Linkedhashmap，tree相关的把亮怀的设计模式的书借来看了看，后面一边总结设计模式 分类12345678910111213141516设计模式的基本要素：名称、问题、解决方案、效果。GOF目前分类创建型：4结构型：8行为型：10遵循原则面向对象设计单一职责原则开闭原则里氏替换原则依赖倒转原则接口隔离">
+<meta property="og:description" content="java集合里面，我觉得最有必要看的源码就是hashmap，其他的后面有机会再看看，比如Linkedhashmap，tree相关的把亮怀的设计模式的书借来看了看，后面一边总结设计模式 分类12345678910111213141516设计模式的基本要素：名称、问题、解决方案、效果。GOF目前分类创建型：4结构型：8行为型：10遵循原则面向对象设计单一职责原则:一个对象应该只包含单一的职责，并且该职">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-06T14:34:17.834Z">
-<meta property="article:modified_time" content="2021-12-06T14:47:01.396Z">
+<meta property="article:modified_time" content="2021-12-07T15:00:01.962Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -175,7 +175,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>java集合里面，我觉得最有必要看的源码就是hashmap，其他的后面有机会再看看，比如Linkedhashmap，tree相关的<br>把亮怀的设计模式的书借来看了看，后面一边总结设计模式</p>
-<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">设计模式的基本要素：名称、问题、解决方案、效果。</span><br><span class="line">GOF目前分类</span><br><span class="line">创建型：4</span><br><span class="line">结构型：8</span><br><span class="line">行为型：10</span><br><span class="line"></span><br><span class="line">遵循原则</span><br><span class="line">面向对象设计</span><br><span class="line">单一职责原则</span><br><span class="line">开闭原则</span><br><span class="line">里氏替换原则</span><br><span class="line">依赖倒转原则</span><br><span class="line">接口隔离原则</span><br><span class="line">合成复用原则</span><br><span class="line">迪米特法则</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">设计模式的基本要素：名称、问题、解决方案、效果。</span><br><span class="line">GOF目前分类</span><br><span class="line">创建型：4</span><br><span class="line">结构型：8</span><br><span class="line">行为型：10</span><br><span class="line"></span><br><span class="line">遵循原则</span><br><span class="line">面向对象设计</span><br><span class="line">单一职责原则:一个对象应该只包含单一的职责，并且该职责被完整的封装在一个类中（担任的职责越多，被复用的可能越小-&gt;高内聚，低耦合）</span><br><span class="line">开闭原则：软件实体应该对扩展开放，对修改关闭（不修改原有代码的前提下拓展）-》抽象化是关键，是目标；</span><br><span class="line">里氏替换原则：所有引用基类的地方必须能透明地使用其子类对象（我喜欢动物-》我喜欢狗 √；我喜欢狗 -&gt;我喜欢动物 ×）</span><br><span class="line">依赖倒转原则：高层模块不应该依赖底层模块，他们应该依赖抽象，抽象不应该依赖细节，细节应该依赖抽象（针对接口编程，不要针对实现编程）</span><br><span class="line">接口隔离原则：客户端不应该依赖那些他不需要的接口-&gt;注意控制接口的粒度-&gt;参考单一职责原则</span><br><span class="line">合成复用原则：优先使用对象组合，而不是通过继承来达到复用的目的（多用关联，少用继承）</span><br><span class="line">迪米特法则：每一个软件单位对其他单位都只有最少的知识，而且局限于那些与本单位密切相关的单位（某一模块发生修改时尽量少的影响到其他模块，扩展会相对容易）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">工欲善其事必先利其器，想有好的设计思路必定要在脑子里有一个完整清晰的构思，首先要搞清楚做什么，所以这些前置原则是至关重要的，正是因为有了这些原则，才有了后面的设计模式</span><br></pre></td></tr></table></figure>
       
 
@@ -268,6 +268,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2021/12/08/factoryMethod/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          工厂方法模式
+        
+      </div>
+    </a>
   
   
     <a href="/2021/12/02/redBlackTree/" id="article-nav-older" class="article-nav-link-wrap">

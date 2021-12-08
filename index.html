@@ -152,6 +152,70 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-factoryMethod" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/12/08/factoryMethod/">工厂方法模式</a>
+    </h1>
+  
+
+        
+        <a href="/2021/12/08/factoryMethod/" class="archive-article-date">
+  	<time datetime="2021-12-08T15:19:10.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="代码是最好的解释"><a href="#代码是最好的解释" class="headerlink" title="代码是最好的解释"></a>代码是最好的解释</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">package design.create;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author TylerpxRao@gmail.com</span><br><span class="line"> * @date 2021/12/8 22:11</span><br><span class="line"> */</span><br><span class="line">public class FactoryMethodPattern &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        LoggerFactory loggerFactory;</span><br><span class="line">        Logger logger;</span><br><span class="line">        // 当需要切换记录日志模式时，此处需要修改代码，不符合开闭原则-&gt;可以通过反射配合配置文件实现</span><br><span class="line">        //loggerFactory = new FileLoggerFactory();</span><br><span class="line">        // 有logger配置文件logger.config-</span><br><span class="line">        //&lt;config&gt;</span><br><span class="line">        //&lt;className&gt;design.create.FileLoggerFactory&lt;/className&gt;</span><br><span class="line">        //&lt;/config&gt;</span><br><span class="line">        loggerFactory = (LoggerFactory)XmlUtil.getBean();</span><br><span class="line">        logger = loggerFactory.createLogger();</span><br><span class="line">        logger.writeLog();</span><br><span class="line"></span><br><span class="line">        // 工厂方法对客户端隐藏,直接使用工厂对象来调用产品对象的方法</span><br><span class="line">        // loggerFactory.write()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interface LoggerFactory &#123;</span><br><span class="line">    // 抽象工厂方法</span><br><span class="line">    public Logger createLogger();</span><br><span class="line">    // 抽象工程支持重载，用于后续不同场景的拓展,例如 数据库记录日志需要传入数据库连接信息等</span><br><span class="line">    // public Logger createLogger(String args);</span><br><span class="line"></span><br><span class="line">    // 工厂方法的隐藏，对客户端隐藏，只需要将接口修改成抽象类，直接调用write写入日志</span><br><span class="line">//    public void <span class="function"><span class="title">write</span></span>() &#123;</span><br><span class="line">//        Logger logger = this.createLogger();</span><br><span class="line">//        logger.writeLog();</span><br><span class="line">//    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class FileLoggerFactory implements LoggerFactory &#123;</span><br><span class="line">    public Logger <span class="function"><span class="title">createLogger</span></span>() &#123;</span><br><span class="line">        // 创建文件日志记录对象</span><br><span class="line">        Logger logger = new FileLogger();</span><br><span class="line">        <span class="built_in">return</span> logger;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DatabaseLoggerFactory implements LoggerFactory &#123;</span><br><span class="line">    public Logger <span class="function"><span class="title">createLogger</span></span>() &#123;</span><br><span class="line">        // 创建数据库日志记录对象</span><br><span class="line">        Logger logger = new DataBaseLogger();</span><br><span class="line">        // 各种数据库操作...</span><br><span class="line">        <span class="built_in">return</span> logger;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface Logger &#123;</span><br><span class="line">    public void writeLog();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class FileLogger implements Logger &#123;</span><br><span class="line">    public void <span class="function"><span class="title">writeLog</span></span>() &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;文件日志记录&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DataBaseLogger implements Logger &#123;</span><br><span class="line">    public void <span class="function"><span class="title">writeLog</span></span>() &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;数据库日志记录&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="xml文件读取模拟工具类"><a href="#xml文件读取模拟工具类" class="headerlink" title="xml文件读取模拟工具类"></a>xml文件读取模拟工具类</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">package design.create;</span><br><span class="line"></span><br><span class="line">import org.w3c.dom.Document;</span><br><span class="line">import org.w3c.dom.Node;</span><br><span class="line">import org.w3c.dom.NodeList;</span><br><span class="line"></span><br><span class="line">import javax.xml.parsers.DocumentBuilder;</span><br><span class="line">import javax.xml.parsers.DocumentBuilderFactory;</span><br><span class="line">import java.io.File;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author TylerpxRao@gmail.com</span><br><span class="line"> * @date 2021/12/8 22:32</span><br><span class="line"> */</span><br><span class="line">public class XmlUtil &#123;</span><br><span class="line">    public static Object <span class="function"><span class="title">getBean</span></span>() &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            // 创建dom文件对象</span><br><span class="line">            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();</span><br><span class="line">            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();</span><br><span class="line">            Document document;</span><br><span class="line">            // 文件对象</span><br><span class="line">            document = documentBuilder.parse(new File(<span class="string">&quot;src//design//create//logger.config&quot;</span>));</span><br><span class="line">            // 获取包含类名的文本节点</span><br><span class="line">            NodeList nodeList = document.getElementsByTagName(<span class="string">&quot;className&quot;</span>);</span><br><span class="line">            Node node = nodeList.item(0).getFirstChild();</span><br><span class="line">            String cName = node.getNodeValue();</span><br><span class="line">            // 通过类名生成对象</span><br><span class="line">            Class clazz= Class.forName(cName);</span><br><span class="line">            Object obj = clazz.newInstance();</span><br><span class="line">            <span class="built_in">return</span> obj;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            e.getMessage();</span><br><span class="line">            <span class="built_in">return</span> null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="小结–统一总结"><a href="#小结–统一总结" class="headerlink" title="小结–统一总结"></a>小结–统一总结</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">具体总结 感觉需要理清 画个图  最好把类图也画出来</span><br><span class="line">netty也开始了，先写了最简单的客户端 服务器通讯的demo 明天整理上传</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/12/08/factoryMethod/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-designMoedl" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -173,7 +237,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>java集合里面，我觉得最有必要看的源码就是hashmap，其他的后面有机会再看看，比如Linkedhashmap，tree相关的<br>把亮怀的设计模式的书借来看了看，后面一边总结设计模式</p>
-<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">设计模式的基本要素：名称、问题、解决方案、效果。</span><br><span class="line">GOF目前分类</span><br><span class="line">创建型：4</span><br><span class="line">结构型：8</span><br><span class="line">行为型：10</span><br><span class="line"></span><br><span class="line">遵循原则</span><br><span class="line">面向对象设计</span><br><span class="line">单一职责原则</span><br><span class="line">开闭原则</span><br><span class="line">里氏替换原则</span><br><span class="line">依赖倒转原则</span><br><span class="line">接口隔离原则</span><br><span class="line">合成复用原则</span><br><span class="line">迪米特法则</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">设计模式的基本要素：名称、问题、解决方案、效果。</span><br><span class="line">GOF目前分类</span><br><span class="line">创建型：4</span><br><span class="line">结构型：8</span><br><span class="line">行为型：10</span><br><span class="line"></span><br><span class="line">遵循原则</span><br><span class="line">面向对象设计</span><br><span class="line">单一职责原则:一个对象应该只包含单一的职责，并且该职责被完整的封装在一个类中（担任的职责越多，被复用的可能越小-&gt;高内聚，低耦合）</span><br><span class="line">开闭原则：软件实体应该对扩展开放，对修改关闭（不修改原有代码的前提下拓展）-》抽象化是关键，是目标；</span><br><span class="line">里氏替换原则：所有引用基类的地方必须能透明地使用其子类对象（我喜欢动物-》我喜欢狗 √；我喜欢狗 -&gt;我喜欢动物 ×）</span><br><span class="line">依赖倒转原则：高层模块不应该依赖底层模块，他们应该依赖抽象，抽象不应该依赖细节，细节应该依赖抽象（针对接口编程，不要针对实现编程）</span><br><span class="line">接口隔离原则：客户端不应该依赖那些他不需要的接口-&gt;注意控制接口的粒度-&gt;参考单一职责原则</span><br><span class="line">合成复用原则：优先使用对象组合，而不是通过继承来达到复用的目的（多用关联，少用继承）</span><br><span class="line">迪米特法则：每一个软件单位对其他单位都只有最少的知识，而且局限于那些与本单位密切相关的单位（某一模块发生修改时尽量少的影响到其他模块，扩展会相对容易）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">工欲善其事必先利其器，想有好的设计思路必定要在脑子里有一个完整清晰的构思，首先要搞清楚做什么，所以这些前置原则是至关重要的，正是因为有了这些原则，才有了后面的设计模式</span><br></pre></td></tr></table></figure>
       
 
@@ -444,6 +508,7 @@
 <h3 id="11-27"><a href="#11-27" class="headerlink" title="11-27"></a>11-27</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">周六加班：AppInfo性能环境切gussdb之后TPS下降显著，RT增加</span><br><span class="line">分析了一下，工具用的arthas，</span><br><span class="line">arthas环境安装，JDK安装，环境变量配置</span><br><span class="line">arthas使用 java -jar arthas-boot.jar 注意路径</span><br><span class="line">会出来对应可监控进程，选择进入（注意当前用户必须跟进程用户一致，否则无法跟踪）</span><br><span class="line">先分析代码，找出核心方法 使用trace 类 方法 命令跟踪</span><br><span class="line">会得到核心方法中的方法处理耗时（两个查库dao耗时很高，sql在数据库单独查询耗时并不高）</span><br><span class="line">sql是否可优化，索引？，数据库计算转换为内存计算（不用函数）？个人感觉sql没啥问题，可优化性不高且slowSQL.log没有打印--&gt;慢sql调优</span><br><span class="line">比较切库前后的表结构，索引等 explain sql 耗时相差不大</span><br><span class="line">sql没问题，表没问题：考虑是库的问题，初步定位：1.网络耗时（云库不在同一网络）2.数据库CPU使用过高（查看了云数据库的监控日志，压测分析时，确实CPU冲高了）</span><br><span class="line">结论：公司要省钱，切的云库给的资源很少，只能从代码优化，增加缓存，不是常用接口，缓存时间设置的尽量短</span><br><span class="line">碎片：系统性文档输出 记住</span><br><span class="line">2.编码问题</span><br><span class="line">面临一个场景 <span class="built_in">continue</span>.....</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="12-2"><a href="#12-2" class="headerlink" title="12-2"></a>12-2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">最近版本收尾，没啥事情，守着两个提示单，一个bi日志过大的，没法优化字段，也不让提前释放，最终只能申请扩容</span><br><span class="line">还有个缓存加载失败的问题，看了下日志，L2缓存刷新定时任务跑了五个小时没跑完...应该得改成多线程方式，因为目前appinfo缓存刷新方式主要是dmq消息和定时任务刷新，会存在因为定时任务刷新过慢，中途接受到dmq消息刷新之后，定时任务刷的还是之前的，缓存被回退了，不一致问题，这个也很难定位</span><br><span class="line">今天没啥产出，上班看了看PDF，主要是一些编码技巧，比如排序 直接使用Arrays.sort方法跟自己去实现排序 在数组大小不超过1w的情况下性能基本没有差别，所以要善于利用api</span><br><span class="line">然后看了些linux命令 还是比较实用的，比如customlist服务磁盘满了部署失败，可以使用df -h查看磁盘分区使用情况，然后进到具体文件目录，使用du命令查看文件的大小，清理一些占用空间较大的无用文件，具体这里mark一下，后面linux复习的时候输出命令文档</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="12-6"><a href="#12-6" class="headerlink" title="12-6"></a>12-6</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">今天工作产出很低，就给人拉着看问题... 归档了一些海外的2b2c的dcs3.0集群，双十二马上就到了，已经着手云主机的事情，另外主机下来了之后，并行开始项目的搭建，云主机环境安装...</span><br><span class="line">空余时间主要是看PDF，写出高效代码的156个建议，小技巧还是蛮多的，工作中也是很实用的，比如坚持重构，一点点的优化系统，比如Store的常量都是用接口来做的，其实用枚举是更好的，还有线程池的合理选择和配置，lock和synchornized的使用等等....</span><br></pre></td></tr></table></figure>
+<h3 id="12-8"><a href="#12-8" class="headerlink" title="12-8"></a>12-8</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">定位了一个现网空指针问题，主要是两点需要注意，1.返回结果  先创建一个空list ,res.setResult(lsit)，后续处理到一半塞了东西进去，抛出异常，此时返回的状态码 1，但是仍然有结果返回，这样处理有问题</span><br><span class="line">2.很常见的问题，定义Map&lt;String，Integer&gt; map，去取map的value时候没取到是null，此时如果存在 int value = map.get(key); 直接抛出空指针，包装类型转基本类型都是抛出空指针</span><br><span class="line"></span><br></pre></td></tr></table></figure>
       
 
       
@@ -812,82 +877,10 @@ private static int hugeCapacity(int minCapacity) &#123;
 
 
   
-    <article id="post-plain" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/24/plain/">冬天总要干点什么</a>
-    </h1>
-  
-
-        
-        <a href="/2021/01/24/plain/" class="archive-article-date">
-  	<time datetime="2021-01-24T03:16:37.294Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>冬天就要到了，很有感觉，总结一下以前的东西，大学的东西也忘得差不多了TnT</p>
-<h2 id="大方向"><a href="#大方向" class="headerlink" title="大方向"></a>大方向</h2><h3 id="java源码回顾"><a href="#java源码回顾" class="headerlink" title="java源码回顾"></a>java源码回顾</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">包装类型</span><br><span class="line">IO/NIO</span><br><span class="line">集合</span><br><span class="line">多线程</span><br><span class="line">socket</span><br></pre></td></tr></table></figure>
-<p>后续逐步补充</p>
-<h3 id="jvm"><a href="#jvm" class="headerlink" title="jvm"></a>jvm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jvm内存模型 java内存模型</span><br><span class="line">配合jvm去理解锁、同步</span><br><span class="line">jvm回收算法</span><br><span class="line">jvm垃圾回收器以及搭配</span><br><span class="line">实战：appinfocompare服务性能要求极高，且经常发生报警，拿来做实际分析</span><br></pre></td></tr></table></figure>
-<h3 id="框架回顾"><a href="#框架回顾" class="headerlink" title="框架回顾"></a>框架回顾</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring IOC/AOP源码</span><br><span class="line">springboot源码</span><br><span class="line">mybatis原理</span><br><span class="line">springcloud熟悉使用实战</span><br></pre></td></tr></table></figure>
-<p>后续逐步补充相关框架</p>
-<h3 id="设计模式总结"><a href="#设计模式总结" class="headerlink" title="设计模式总结"></a>设计模式总结</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">二十三种设计模式的原理，实现，典型应用</span><br></pre></td></tr></table></figure>
-<h3 id="数据结构及计算法"><a href="#数据结构及计算法" class="headerlink" title="数据结构及计算法"></a>数据结构及计算法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">回顾完java集合相关源码，</span><br><span class="line">手写实现各种数据结构：数组、栈、队列、链表、树、散列表、堆</span><br><span class="line">模拟相关操作，如 二叉树先序,中序,后序遍历过程</span><br><span class="line">八大排序的原理，实现重现</span><br><span class="line">算法的话坚持leetcode刷题看看书吧</span><br></pre></td></tr></table></figure>
-<p>记得有个跳表也回顾下…</p>
-<h3 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">常用函数</span><br><span class="line">典型慢sql优化（appinfo很多可以捞出来分析）</span><br><span class="line">索引</span><br><span class="line">主从复制读写分离配置</span><br><span class="line">mycat分库分表</span><br></pre></td></tr></table></figure>
-<h3 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">redis</span><br><span class="line">mq</span><br><span class="line">casendra</span><br><span class="line">es</span><br></pre></td></tr></table></figure>
-<p>慢慢补充吧</p>
-<h3 id="网络相关知识"><a href="#网络相关知识" class="headerlink" title="网络相关知识"></a>网络相关知识</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tpc/UDP</span><br><span class="line">...</span><br><span class="line">网络协议</span><br><span class="line">数据传输</span><br></pre></td></tr></table></figure>
-<h3 id="计算机组成原理"><a href="#计算机组成原理" class="headerlink" title="计算机组成原理"></a>计算机组成原理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">书还带着，上学的相关知识总结回顾？</span><br></pre></td></tr></table></figure>
-<h3 id="小的计划"><a href="#小的计划" class="headerlink" title="小的计划"></a>小的计划</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">双十二大出血搞一台香港的主机玩一年</span><br><span class="line">做一个springcloud（整合当前比较流行的组建spring-security-oauth2、nacos、feign、sentinel、springcloud-gateway）的项目且部署（docker需要回顾）</span><br><span class="line">一直想做一个点外卖的功能（吃什么、怎么薅羊毛在我靠外卖为生的那段时间花了我太多的时间跟脑细胞）</span><br><span class="line">数据来源：美饿---目前上班摸鱼看了很多python的东西，感觉是能做到的</span><br><span class="line">具体功能心中有个大概猜想，后面花时间去设计....</span><br><span class="line">以上大概就是目前的小目标，积少成多吧！</span><br></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/24/plain/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 
