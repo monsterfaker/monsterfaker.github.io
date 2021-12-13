@@ -152,6 +152,72 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-netty_helloworld" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/12/13/netty_helloworld/">netty入门</a>
+    </h1>
+  
+
+        
+        <a href="/2021/12/13/netty_helloworld/" class="archive-article-date">
+  	<time datetime="2021-12-13T15:13:12.881Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Netty是 一个异步事件驱动的网络应用程序框架，用于快速开发可维护的高性能协议服务器和客户端。</p>
+<h3 id="为什么用netty"><a href="#为什么用netty" class="headerlink" title="为什么用netty"></a>为什么用netty</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">NIO原生类库的缺点</span><br><span class="line">NIO的类库和API繁杂，学习成本高，你需要熟练掌握Selector、ServerSocketChannel、SocketChannel、ByteBuffer等。</span><br><span class="line">需要熟悉Java多线程编程。这是因为NIO编程涉及到Reactor模式，你必须对多线程和网络编程非常熟悉，才能写出高质量的NIO程序。</span><br><span class="line">臭名昭著的epoll bug。它会导致Selector空轮询，最终导致CPU 100%。直到JDK1.7版本依然没得到根本性的解决。</span><br><span class="line"></span><br><span class="line">netty的优点</span><br><span class="line">API使用简单，学习成本低。</span><br><span class="line">功能强大，内置了多种解码编码器，支持多种协议。</span><br><span class="line">性能高，对比其他主流的NIO框架，Netty的性能最优。</span><br><span class="line">社区活跃，发现BUG会及时修复，迭代版本周期短，不断加入新的功能。</span><br><span class="line">Dubbo、Elasticsearch都采用了Netty，质量得到验证</span><br></pre></td></tr></table></figure>
+<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Core核心模块：包括零拷贝、API库、可扩展的事件模型</span><br><span class="line">Protocol Support协议支持：包括Http协议、webSocket、SSL(安全套接字协议)、谷歌Protobuf协议、zlib/gzip压缩与解压缩、Large File Transfer大文件传输等等。</span><br><span class="line">Transport Services传输服务:包括Socket、Datagram、Http Tunnel等等</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="简单demo"><a href="#简单demo" class="headerlink" title="简单demo"></a>简单demo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line">package netty;</span><br><span class="line"></span><br><span class="line">import io.netty.bootstrap.ServerBootstrap;</span><br><span class="line">import io.netty.buffer.ByteBuf;</span><br><span class="line">import io.netty.buffer.Unpooled;</span><br><span class="line">import io.netty.channel.*;</span><br><span class="line">import io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line">import io.netty.channel.socket.SocketChannel;</span><br><span class="line">import io.netty.channel.socket.nio.NioServerSocketChannel;</span><br><span class="line">import io.netty.util.CharsetUtil;</span><br><span class="line"></span><br><span class="line">import java.nio.ByteBuffer;</span><br><span class="line">import java.nio.charset.Charset;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author TylerpxRao@gmail.com</span><br><span class="line"> * @date 2021/12/8 22:58</span><br><span class="line"> */</span><br><span class="line">public class NettyServer &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        EventLoopGroup bossGroup = new NioEventLoopGroup();</span><br><span class="line">        EventLoopGroup workGroup = new NioEventLoopGroup();</span><br><span class="line">        try &#123;</span><br><span class="line">            ServerBootstrap serverBootstrap = new ServerBootstrap();</span><br><span class="line">            serverBootstrap.group(bossGroup,workGroup)</span><br><span class="line">                    .channel(NioServerSocketChannel.class)</span><br><span class="line">                    .option(ChannelOption.SO_BACKLOG,128)</span><br><span class="line">                    .childHandler(new ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        @Override</span><br><span class="line">                        protected void initChannel(SocketChannel socketChannel) throws Exception &#123;</span><br><span class="line">                            socketChannel.pipeline().addLast(new NettyServerHandler());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            ChannelFuture channelFuture = serverBootstrap.bind(6666).sync();</span><br><span class="line">            channelFuture.channel().closeFuture().sync();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">            bossGroup.shutdownGracefully();</span><br><span class="line">            workGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class NettyServerHandler extends ChannelHandlerAdapter &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception &#123;</span><br><span class="line">        // 异常关闭</span><br><span class="line">        ctx.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception &#123;</span><br><span class="line">        ByteBuf byteBuf =(ByteBuf) msg;</span><br><span class="line">        System.out.println(<span class="string">&quot;server received&quot;</span>+ctx.channel().remoteAddress()+<span class="string">&quot;&#x27;s message:&quot;</span>+ byteBuf.toString(CharsetUtil.UTF_8));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception &#123;</span><br><span class="line">        ctx.writeAndFlush(Unpooled.copiedBuffer(<span class="string">&quot;server received over,and send:end!&quot;</span>, CharsetUtil.UTF_8));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">package netty;</span><br><span class="line"></span><br><span class="line">import io.netty.bootstrap.Bootstrap;</span><br><span class="line">import io.netty.buffer.ByteBuf;</span><br><span class="line">import io.netty.buffer.Unpooled;</span><br><span class="line">import io.netty.channel.ChannelFuture;</span><br><span class="line">import io.netty.channel.ChannelHandlerAdapter;</span><br><span class="line">import io.netty.channel.ChannelHandlerContext;</span><br><span class="line">import io.netty.channel.ChannelInitializer;</span><br><span class="line">import io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line">import io.netty.channel.socket.SocketChannel;</span><br><span class="line">import io.netty.channel.socket.nio.NioSocketChannel;</span><br><span class="line">import io.netty.util.CharsetUtil;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author TylerpxRao@gmail.com</span><br><span class="line"> * @date 2021/12/13 22:58</span><br><span class="line"> */</span><br><span class="line">public class NettyClient &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup();</span><br><span class="line">        try &#123;</span><br><span class="line">            Bootstrap bootstrap = new Bootstrap();</span><br><span class="line">            bootstrap.group(eventLoopGroup)</span><br><span class="line">                    .channel(NioSocketChannel.class)</span><br><span class="line">                    .handler(new ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        @Override</span><br><span class="line">                        protected void initChannel(SocketChannel socketChannel) throws Exception &#123;</span><br><span class="line">                            socketChannel.pipeline().addLast();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            System.out.println(<span class="string">&quot;client prepare ok&quot;</span>);</span><br><span class="line">            ChannelFuture channelFuture = bootstrap.connect(<span class="string">&quot;127.0.0.1&quot;</span>,6666).sync();</span><br><span class="line">            channelFuture.channel().closeFuture().sync();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            eventLoopGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ClentHandler extends ChannelHandlerAdapter &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;</span><br><span class="line">        ctx.writeAndFlush(Unpooled.copiedBuffer(<span class="string">&quot;hello server i am client !!!&quot;</span>, CharsetUtil.UTF_8));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception &#123;</span><br><span class="line">        // 接收服务端发来的消息</span><br><span class="line">        ByteBuf byteBuf =  (ByteBuf) msg;</span><br><span class="line">        System.out.println(<span class="string">&quot;received&quot;</span>+ctx.channel().remoteAddress()+<span class="string">&quot;&#x27;s message&quot;</span> +byteBuf.toString(CharsetUtil.UTF_8));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Netty的功能、协议、传输方式都比较全，比较强大。上面只是一个简单的netty通信demo，后续深入netty架构，看看他如何解决粘包拆包问题...</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/12/13/netty_helloworld/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-factoryMethod" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -509,6 +575,7 @@
 <h3 id="12-2"><a href="#12-2" class="headerlink" title="12-2"></a>12-2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">最近版本收尾，没啥事情，守着两个提示单，一个bi日志过大的，没法优化字段，也不让提前释放，最终只能申请扩容</span><br><span class="line">还有个缓存加载失败的问题，看了下日志，L2缓存刷新定时任务跑了五个小时没跑完...应该得改成多线程方式，因为目前appinfo缓存刷新方式主要是dmq消息和定时任务刷新，会存在因为定时任务刷新过慢，中途接受到dmq消息刷新之后，定时任务刷的还是之前的，缓存被回退了，不一致问题，这个也很难定位</span><br><span class="line">今天没啥产出，上班看了看PDF，主要是一些编码技巧，比如排序 直接使用Arrays.sort方法跟自己去实现排序 在数组大小不超过1w的情况下性能基本没有差别，所以要善于利用api</span><br><span class="line">然后看了些linux命令 还是比较实用的，比如customlist服务磁盘满了部署失败，可以使用df -h查看磁盘分区使用情况，然后进到具体文件目录，使用du命令查看文件的大小，清理一些占用空间较大的无用文件，具体这里mark一下，后面linux复习的时候输出命令文档</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="12-6"><a href="#12-6" class="headerlink" title="12-6"></a>12-6</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">今天工作产出很低，就给人拉着看问题... 归档了一些海外的2b2c的dcs3.0集群，双十二马上就到了，已经着手云主机的事情，另外主机下来了之后，并行开始项目的搭建，云主机环境安装...</span><br><span class="line">空余时间主要是看PDF，写出高效代码的156个建议，小技巧还是蛮多的，工作中也是很实用的，比如坚持重构，一点点的优化系统，比如Store的常量都是用接口来做的，其实用枚举是更好的，还有线程池的合理选择和配置，lock和synchornized的使用等等....</span><br></pre></td></tr></table></figure>
 <h3 id="12-8"><a href="#12-8" class="headerlink" title="12-8"></a>12-8</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">定位了一个现网空指针问题，主要是两点需要注意，1.返回结果  先创建一个空list ,res.setResult(lsit)，后续处理到一半塞了东西进去，抛出异常，此时返回的状态码 1，但是仍然有结果返回，这样处理有问题</span><br><span class="line">2.很常见的问题，定义Map&lt;String，Integer&gt; map，去取map的value时候没取到是null，此时如果存在 int value = map.get(key); 直接抛出空指针，包装类型转基本类型都是抛出空指针</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="12-13"><a href="#12-13" class="headerlink" title="12-13"></a>12-13</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">12.0版本开始了，目前把问题单都清了，手上两个优化AR基本也搞定了，后面主要是一个SR的设计吧</span><br><span class="line">花了79买了一年的2c 4gb腾讯云主机（讲道理双12真的便宜太多了），后面开始搭建基础微服务框架（springcloudAlibaba）</span><br></pre></td></tr></table></figure>
       
 
       
@@ -783,71 +850,6 @@ private static int hugeCapacity(int minCapacity) &#123;
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/11/17/think_in_java_Integer/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-think_in_java_1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/11/17/think_in_java_1/">java 基础篇</a>
-    </h1>
-  
-
-        
-        <a href="/2021/11/17/think_in_java_1/" class="archive-article-date">
-  	<time datetime="2021-11-17T13:32:20.922Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="数据类型及基本语法"><a href="#数据类型及基本语法" class="headerlink" title="数据类型及基本语法"></a>数据类型及基本语法</h2><h3 id="八大基本数据类型"><a href="#八大基本数据类型" class="headerlink" title="八大基本数据类型"></a>八大基本数据类型</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">数据类型	大小(位)	取值范围				默认值</span><br><span class="line">byte			8					-2^7 - 2^7-1		0</span><br><span class="line">short			16				-2^15–2^15-1		0</span><br><span class="line">char			16				\u0000~u\ffff 	\u0000</span><br><span class="line">int				32				-2^31–2^31-1		0</span><br><span class="line">long			64				-2^63–2^63-1		0L</span><br><span class="line"><span class="built_in">float</span>			32												0.0f</span><br><span class="line">double		64												0.0d</span><br><span class="line">boolean	1						<span class="literal">true</span>/<span class="literal">false</span>			<span class="literal">false</span></span><br><span class="line"></span><br><span class="line">基本数据类型都是直接存储在内存中的内存栈上的，数据本身的值存贮在栈空间</span><br><span class="line">自动类型转换：byte-&gt;short-&gt;int(char独立分支)-&gt;long-&gt;<span class="built_in">float</span>-&gt;double</span><br><span class="line">Exp: int+long -&gt;long</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">引用类型：类、接口、数组、String。默认值为null，引用类型都是分配在堆中</span><br></pre></td></tr></table></figure>
-<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">算术运算符：+，-，*，/，%，++，--</span><br><span class="line">逻辑运算符：&amp;&amp;,||,!</span><br><span class="line">赋值运算符：=(可联合算术运算符 +=)</span><br><span class="line">关系运算符：&lt;,&gt;,&lt;=,&gt;=,!= (结果为boolean值)</span><br><span class="line">位运算符：左移&lt;&lt;,右移&gt;&gt;,无符号右移( &gt;&gt;&gt; )位与( &amp; )、位或( | )、位非( ~ )、位异或( ^ )，除了位非( ~ ):(最快求出2的次方 2&lt;3)</span><br><span class="line">	位与(&amp;)：第一个操作数的的第n位于第二个操作数的第n位如果都是1，那么结果的第n为也为1，否则为0</span><br><span class="line">	位或操作(|)：第一个操作数的的第n位于第二个操作数的第n位 只要有一个是1，那么结果的第n为也为1，否则为0</span><br><span class="line">	位异或(^)：第一个操作数的的第n位于第二个操作数的第n位相反，那么结果的第n为也为1，否则为0</span><br><span class="line">	位非(~)：操作数的第n位为1，那么结果的第n位为0，反之。</span><br><span class="line">	三目运算: a &gt; b ？a ：b;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="小问题"><a href="#小问题" class="headerlink" title="小问题"></a>小问题</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">上面就是一些基本的东西，其实位运算的应用才是最奇妙的，后面单独抽出来整理整理</span><br><span class="line">对于一些基本的东西，其实我们也不应该忽视，比如下面的小例子</span><br><span class="line"></span><br><span class="line">package basicType;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author TylerpxRao@gmail.com</span><br><span class="line"> * @date 2021/11/17 20:52</span><br><span class="line"> */</span><br><span class="line">public class ValueOverFlowDemo &#123;</span><br><span class="line">    private static int MAX_NUM = 100;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        bug(20,60);</span><br><span class="line">        bug(20,2147483647);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void bug(int hasBuy,int num) &#123;</span><br><span class="line">        <span class="keyword">if</span> (num &gt; 0 &amp;&amp; hasBuy + num &lt;= MAX_NUM) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;success bug &quot;</span> + num);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;you can&#x27;t buy more than 100&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">这种简单程序大家肯定看得懂，就是超出最大能够购买的数量之后不允许再购买（最大可购买数量是100）</span><br><span class="line">理论上，后面购买的数量那么大是不应该能成功的，实际上程序输出结果</span><br><span class="line">success bug 60</span><br><span class="line">success bug 2147483647</span><br><span class="line">这跟我们的预期是不符的，其实这就是典型的值溢出，当超出int类型最大值 2147483647，会自动转成long类型，此时实际是一个负数，所以跳过了校验</span><br><span class="line">只能说注重细节吧，后面我们开始从源码的角度去看各种包装类，String等</span><br></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/11/17/think_in_java_1/">展开全文 >></a>
         </p>
       
 
