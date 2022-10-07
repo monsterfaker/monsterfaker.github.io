@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives: 2021/12 | like winter</title>
+  <title>like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="1234title: spring对象创建date: 2021-05-01tags:spring: sorce-code 1.Spring底层核心原理解析123AnnotationConfigApplicationContext context &#x3D; new AnnotationConfigApplicationContext(AppConfig.class);UserService userSer">
+<meta property="og:type" content="article">
 <meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/2021/12/index.html">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/spring_newObj/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="1234title: spring对象创建date: 2021-05-01tags:spring: sorce-code 1.Spring底层核心原理解析123AnnotationConfigApplicationContext context &#x3D; new AnnotationConfigApplicationContext(AppConfig.class);UserService userSer">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-06T08:10:08.026Z">
+<meta property="article:modified_time" content="2022-10-06T12:27:16.098Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,184 +154,198 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-spring_newObj" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title: spring对象创建</span><br><span class="line">date: 2021-05-01</span><br><span class="line">tags:</span><br><span class="line">spring: sorce-code</span><br></pre></td></tr></table></figure>
+<h4 id="1-Spring底层核心原理解析"><a href="#1-Spring底层核心原理解析" class="headerlink" title="1.Spring底层核心原理解析"></a>1.Spring底层核心原理解析</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnnotationConfigApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line">UserService userService = (UserService) context.getBean(<span class="string">&quot;userService&quot;</span>);</span><br><span class="line">userService.test();</span><br></pre></td></tr></table></figure>
+<p>不管是AnnotationConfigApplicationContext还是ClassPathXmlApplicationContext，目前，我们都可以简单的将它们理解为就是用来创建Java对象的，比如调用getBean()就会去创建对象</p>
+<p>当我们调用context.getBean(“userService”)时，就会去创建一个对象，但是getBean方法内部怎么知道”userService”对应的是UserService类呢？</p>
+<p>所以，我们就可以分析出来，在调用AnnotationConfigApplicationContext的构造方法时，也就是第一行代码，会去做一些事情：</p>
+<ol>
+<li>解析AppConfig.class，得到扫描路径</li>
+<li>遍历扫描路径下的所有Java类，如果发现某个类上存在@Component、@Service等注解，那么Spring就把这个类记录下来，存在一个Map中，比如Map&lt;String, Class&gt;。（<strong>实际上，Spring源码中确实存在类似的这么一个Map，叫做BeanDefinitionMap</strong>）</li>
+<li>Spring会根据某个规则生成当前类对应的beanName，作为key存入Map，当前类作为value</li>
+</ol>
+<p>这样，但调用context.getBean(“userService”)时，就可以根据”userService”找到UserService类，从而就可以去创建对象了。</p>
+<h4 id="Bean的创建过程"><a href="#Bean的创建过程" class="headerlink" title="Bean的创建过程"></a>Bean的创建过程</h4><ol>
+<li><p>利用该类的构造方法来实例化得到一个对象（但是如何一个类中有多个构造方法，Spring则会进行选择，这个叫做<strong>推断构造方法</strong>）</p>
+</li>
+<li><p>得到一个对象后，Spring会判断该对象中是否存在被@Autowired注解了的属性，把这些属性找出来并由Spring进行赋值（<strong>依赖注入</strong>）</p>
+</li>
+<li><p>依赖注入后，Spring会判断该对象是否实现了BeanNameAware接口、BeanClassLoaderAware接口、BeanFactoryAware接口，如果实现了，就表示当前对象必须实现该接口中所定义的setBeanName()、setBeanClassLoader()、setBeanFactory()方法，那Spring就会调用这些方法并传入相应的参数（<strong>Aware回调</strong>）</p>
+</li>
+<li><p>Aware回调后，Spring会判断该对象中是否存在某个方法被@PostConstruct注解了，如果存在，Spring会调用当前对象的此方法（<strong>初始化前</strong>）</p>
+</li>
+<li><p>紧接着，Spring会判断该对象是否实现了InitializingBean接口，如果实现了，就表示当前对象必须实现该接口中的afterPropertiesSet()方法，那Spring就会调用当前对象中的afterPropertiesSet()方法（<strong>初始化</strong>）</p>
+</li>
+<li><p>最后，Spring会判断当前对象需不需要进行AOP，如果不需要那么Bean就创建完了，如果需要进行AOP，则会进行动态代理并生成一个代理对象做为Bean（<strong>初始化后</strong>）</p>
+</li>
+</ol>
+<p>Bean对象创建出来后：</p>
+<ol>
+<li>如果当前Bean是单例Bean，那么会把该Bean对象存入一个Map&lt;String, Object&gt;，Map的key为beanName，value为Bean对象。这样下次getBean时就可以直接从Map中拿到对应的Bean对象了。（实际上，在Spring源码中，这个Map就是<strong>单例池</strong>）</li>
+<li>如果当前Bean是原型Bean，那么后续没有其他动作，不会存入一个Map，下次getBean时会再次执行上述创建过程，得到一个新的Bean对象。</li>
+</ol>
+<h4 id="推断构造方法"><a href="#推断构造方法" class="headerlink" title="推断构造方法"></a>推断构造方法</h4><ol>
+<li><p>如果一个类只存在一个构造方法，Spring会用这个构造方法（不管该构造方法是无参构造方法，还是有参构造方法）</p>
+</li>
+<li><p>如果一个类存在多个构造方法</p>
+</li>
+<li><ol>
+<li>这些构造方法中，存在一个无参的构造方法，那么Spring就会用这个无参的构造方法</li>
+<li>这些构造方法中，不存在一个无参的构造方法，那么Spring就会报错</li>
+</ol>
+</li>
+</ol>
+<p>选择了有参构造方法时，参数根据入参类型+如参名子唯一确定，否则报错</p>
+<h4 id="AOP相关"><a href="#AOP相关" class="headerlink" title="AOP相关"></a>AOP相关</h4><p>如何判断当前Bean对象需不需要进行AOP:</p>
+<ol>
+<li>找出所有的切面Bean</li>
+<li>遍历切面中的每个方法，看是否写了@Before、@After等注解</li>
+<li>如果写了，则判断所对应的Pointcut是否和当前Bean对象的类是否匹配</li>
+<li>如果匹配则表示当前Bean对象有匹配的的Pointcut，表示需要进行AOP</li>
+</ol>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/17/thread_state/" class="archive-article-date">
-  	<time datetime="2021-12-16T16:16:09.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/17/thread_state/">java多线程-并发编程的开始</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/spring_newObj/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/13/netty_helloworld/" class="archive-article-date">
-  	<time datetime="2021-12-13T15:13:12.881Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-13</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2022/10/06/spring%E4%B8%AD%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%A9%E4%BB%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/12/17/thread_state/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">java多线程-并发编程的开始</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/13/netty_helloworld/">netty入门</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/08/factoryMethod/" class="archive-article-date">
-  	<time datetime="2021-12-08T15:19:10.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/08/factoryMethod/">工厂方法模式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/06/designMoedl/" class="archive-article-date">
-  	<time datetime="2021-12-06T14:34:17.834Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/06/designMoedl/">二十三种设计模式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/02/redBlackTree/" class="archive-article-date">
-  	<time datetime="2021-12-02T13:47:16.011Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/02/redBlackTree/">hashmap中的红黑树</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/01/hashmap/" class="archive-article-date">
-  	<time datetime="2021-12-01T12:48:50.923Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/01/hashmap/">hashmap</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -350,8 +368,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

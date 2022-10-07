@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives: 2021/12 | like winter</title>
+  <title>like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="1234title: spring对象创建date: 2021-05-01tags:spring: sorce-code Bean的生成过程1. 生成BeanDefinitionSpring启动的时候会进行扫描，会先调用org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider#scanCan">
+<meta property="og:type" content="article">
 <meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/2021/12/index.html">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E6%B5%85%E7%9C%8B/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="1234title: spring对象创建date: 2021-05-01tags:spring: sorce-code Bean的生成过程1. 生成BeanDefinitionSpring启动的时候会进行扫描，会先调用org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider#scanCan">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-06T12:53:37.801Z">
+<meta property="article:modified_time" content="2022-10-07T01:47:56.520Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,184 +154,251 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-bean生命周期源码浅看" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title: spring对象创建</span><br><span class="line">date: 2021-05-01</span><br><span class="line">tags:</span><br><span class="line">spring: sorce-code</span><br></pre></td></tr></table></figure>
+<h3 id="Bean的生成过程"><a href="#Bean的生成过程" class="headerlink" title="Bean的生成过程"></a>Bean的生成过程</h3><h4 id="1-生成BeanDefinition"><a href="#1-生成BeanDefinition" class="headerlink" title="1. 生成BeanDefinition"></a>1. 生成BeanDefinition</h4><p>Spring启动的时候会进行扫描，会先调用<code>org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider#scanCandidateComponents(String basePackage)</code></p>
+<p>扫描某个包路径，并得到BeanDefinition的Set集合。</p>
+<ol>
+<li>首先，通过ResourcePatternResolver获得指定包路径下的所有<code>.class</code>文件（Spring源码中将此文件包装成了Resource对象）</li>
+<li>遍历每个Resource对象</li>
+<li>利用MetadataReaderFactory解析Resource对象得到MetadataReader（在Spring源码中MetadataReaderFactory具体的实现类为CachingMetadataReaderFactory，MetadataReader的具体实现类为SimpleMetadataReader）</li>
+<li>利用MetadataReader进行excludeFilters和includeFilters，以及条件注解@Conditional的筛选（条件注解并不能理解：某个类上是否存在@Conditional注解，如果存在则调用注解中所指定的类的match方法进行匹配，匹配成功则通过筛选，匹配失败则pass掉。）</li>
+<li>筛选通过后，基于metadataReader生成ScannedGenericBeanDefinition</li>
+<li>再基于metadataReader判断是不是对应的类是不是接口或抽象类</li>
+<li>如果筛选通过，那么就表示扫描到了一个Bean，将ScannedGenericBeanDefinition加入结果集</li>
+</ol>
+<p>CachingMetadataReaderFactory解析某个.class文件得到MetadataReader对象是利用的<strong>ASM</strong>技术，并没有加载这个类到JVM。并且，最终得到的ScannedGenericBeanDefinition对象，<strong>beanClass属性存储的是当前类的名字，而不是class对象</strong>。（beanClass属性的类型是Object，它即可以存储类的名字，也可以存储class对象）</p>
+<p>上面是说的通过扫描得到BeanDefinition对象，我们还可以通过直接定义BeanDefinition，或解析spring.xml文件的<bean/>，或者@Bean注解得到BeanDefinition对象</p>
+<h4 id="2-合并BeanDefinition"><a href="#2-合并BeanDefinition" class="headerlink" title="2.合并BeanDefinition"></a>2.合并BeanDefinition</h4><p>通过扫描得到所有BeanDefinition之后，就可以根据BeanDefinition创建Bean对象了</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;parent&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.zhouyu.service.Parent&quot;</span> <span class="attr">scope</span>=<span class="string">&quot;prototype&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;child&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.zhouyu.service.Child&quot;</span> <span class="attr">parent</span>=<span class="string">&quot;parent&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因为child的父BeanDefinition是parent，所以会继承parent上所定义的scope属性。</p>
+<p>而在根据child来生成Bean对象之前，需要进行BeanDefinition的合并，得到完整的child的BeanDefinition。</p>
+<h4 id="3-加载类"><a href="#3-加载类" class="headerlink" title="3.加载类"></a>3.加载类</h4><p>BeanDefinition合并之后，就可以去创建Bean对象了，而创建Bean就必须实例化对象，而实例化就必须先加载当前BeanDefinition所对应的class，在AbstractAutowireCapableBeanFactory类的createBean()方法中，一开始就会调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; resolvedClass = resolveBeanClass(mbd, beanName);</span><br><span class="line"><span class="comment">// 如果beanClass属性的类型是Class，那么就直接返回</span></span><br><span class="line"><span class="keyword">if</span> (mbd.hasBeanClass()) &#123;</span><br><span class="line">	<span class="keyword">return</span> mbd.getBeanClass();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 如果不是，则会根据类名进行加载 doResolveBeanClass</span></span><br><span class="line"><span class="keyword">if</span> (System.getSecurityManager() != <span class="keyword">null</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> AccessController.doPrivileged((PrivilegedExceptionAction&lt;Class&lt;?&gt;&gt;) () -&gt;</span><br><span class="line">		doResolveBeanClass(mbd, typesToMatch), getAccessControlContext());</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> doResolveBeanClass(mbd, typesToMatch);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasBeanClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">this</span>.beanClass <span class="keyword">instanceof</span> Class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>会利用BeanFactory所设置的类加载器来加载类，如果没有设置，则默认使用**ClassUtils.getDefaultClassLoader()**所返回的类加载器来加载</p>
+<p>ClassUtils.getDefaultClassLoader()</p>
+<ol>
+<li>优先返回当前线程中的ClassLoader</li>
+<li>线程中类加载器为null的情况下，返回ClassUtils类的类加载器</li>
+<li>如果ClassUtils类的类加载器为空，那么则表示是Bootstrap类加载器加载的ClassUtils类，那么则返回系统类加载器</li>
+</ol>
+<h4 id="4-实例化前"><a href="#4-实例化前" class="headerlink" title="4.实例化前"></a>4.实例化前</h4><p>当前BeanDefinition对应的类成功加载后，就可以实例化对象了</p>
+<p>实例化对象之前，Spring提供了一个扩展点，允许用户来控制是否在某个或某些Bean实例化之前做一些启动动作。这个扩展点叫<strong>InstantiationAwareBeanPostProcessor.postProcessBeforeInstantiation()</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceBeanPostProcessor</span> <span class="keyword">implements</span> <span class="title">InstantiationAwareBeanPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInstantiation</span><span class="params">(Class&lt;?&gt; beanClass, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;实例化前&quot;</span>);</span><br><span class="line">			<span class="comment">// 可以操作bean,如下，我们直接返回，后面步骤跳过，不会再进行依赖注入</span></span><br><span class="line">            <span class="comment">//return new UserService();</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="5实例化"><a href="#5实例化" class="headerlink" title="5实例化"></a>5实例化</h4><h5 id="5-1Supplier创建"><a href="#5-1Supplier创建" class="headerlink" title="5.1Supplier创建"></a>5.1Supplier创建</h5><p>首先判断BeanDefinition中是否设置了Supplier，如果设置了则调用Supplier的get()得到对象。</p>
+<p>得直接使用BeanDefinition对象来设置Supplier，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();</span><br><span class="line">beanDefinition.setInstanceSupplier(<span class="keyword">new</span> Supplier&lt;Object&gt;() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> UserService();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line">context.registerBeanDefinition(<span class="string">&quot;userService&quot;</span>, beanDefinition);</span><br></pre></td></tr></table></figure>
+<h5 id="5-2工厂方法创建"><a href="#5-2工厂方法创建" class="headerlink" title="5.2工厂方法创建"></a>5.2工厂方法创建</h5><p>如果没有设置Supplier，则检查BeanDefinition中是否设置了factoryMethod，也就是工厂方法，有两种方式可以设置factoryMethod，比如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;userService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.springsource.service.UserService&quot;</span> <span class="attr">factory-method</span>=<span class="string">&quot;createUserService&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>工厂类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> UserService <span class="title">createUserService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;执行createUserService()&quot;</span>);</span><br><span class="line">		UserService userService = <span class="keyword">new</span> UserService();</span><br><span class="line">		<span class="keyword">return</span> userService;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="5-3构造方法"><a href="#5-3构造方法" class="headerlink" title="5.3构造方法"></a>5.3构造方法</h5><p>之前总结过一次大概原理了，后面有一节课单独分析源码实现。推断完构造方法后，就会使用构造方法来进行实例化了</p>
+<p>额外的，在推断构造方法逻辑中除开会去选择构造方法以及查找入参对象意外，会还判断是否在对应的类中是否存在使用**@Lookup注解**了方法。如果存在则把该方法封装为LookupOverride对象并添加到BeanDefinition中。</p>
+<p>在实例化时，如果判断出来当前BeanDefinition中没有LookupOverride，那就直接用构造方法反射得到一个实例对象。如果存在LookupOverride对象，也就是类中存在@Lookup注解了的方法，那就会生成一个代理对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> OrderService orderService;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		OrderService orderService = createOrderService();</span><br><span class="line">		System.out.println(orderService);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Lookup(&quot;orderService&quot;)</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> OrderService <span class="title">createOrderService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="6-BeanDefinition的后置处理"><a href="#6-BeanDefinition的后置处理" class="headerlink" title="6.BeanDefinition的后置处理"></a>6.BeanDefinition的后置处理</h4><p>Bean对象实例化出来之后，接下来就应该给对象的属性赋值了。在真正给属性赋值之前，Spring又提供了一个扩展点**MergedBeanDefinitionPostProcessor.postProcessMergedBeanDefinition()**，可以对此时的BeanDefinition进行加工，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceMergedBeanDefinitionPostProcessor</span> <span class="keyword">implements</span> <span class="title">MergedBeanDefinitionPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessMergedBeanDefinition</span><span class="params">(RootBeanDefinition beanDefinition, Class&lt;?&gt; beanType, String beanName)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			beanDefinition.getPropertyValues().add(<span class="string">&quot;orderService&quot;</span>, <span class="keyword">new</span> OrderService());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在Spring源码中，AutowiredAnnotationBeanPostProcessor就是一个MergedBeanDefinitionPostProcessor，它的postProcessMergedBeanDefinition()中会去查找注入点，并缓存在AutowiredAnnotationBeanPostProcessor对象的一个Map中（injectionMetadataCache）。</span></span><br></pre></td></tr></table></figure>
+<h4 id="7-实例化后"><a href="#7-实例化后" class="headerlink" title="7.实例化后"></a>7.实例化后</h4><p>在处理完BeanDefinition后，Spring又设计了一个扩展点：**InstantiationAwareBeanPostProcessor.postProcessAfterInstantiation()**，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceInstantiationAwareBeanPostProcessor</span> <span class="keyword">implements</span> <span class="title">InstantiationAwareBeanPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">postProcessAfterInstantiation</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			UserService userService = (UserService) bean;</span><br><span class="line">			userService.test();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="8-自动注入"><a href="#8-自动注入" class="headerlink" title="8.自动注入"></a>8.自动注入</h4><h4 id="9-处理属性"><a href="#9-处理属性" class="headerlink" title="9.处理属性"></a>9.处理属性</h4><p>这个步骤中，就会处理@Autowired、@Resource、@Value等注解，也是通过InstantiationAwareBeanPostProcessor.postProcessProperties()扩展点来实现的，比如我们甚至可以实现一个自己的自动注入功能，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SrpingSourceInstantiationAwareBeanPostProcessor</span> <span class="keyword">implements</span> <span class="title">InstantiationAwareBeanPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> PropertyValues <span class="title">postProcessProperties</span><span class="params">(PropertyValues pvs, Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			<span class="keyword">for</span> (Field field : bean.getClass().getFields()) &#123;</span><br><span class="line">				<span class="keyword">if</span> (field.isAnnotationPresent(ZhouyuInject.class)) &#123;</span><br><span class="line">					field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">						field.set(bean, <span class="string">&quot;123&quot;</span>);</span><br><span class="line">					&#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">						e.printStackTrace();</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> pvs;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="10-执行Aware"><a href="#10-执行Aware" class="headerlink" title="10. 执行Aware"></a>10. 执行Aware</h4><p>完成了属性赋值之后，Spring会执行一些回调，包括：</p>
+<ol>
+<li>BeanNameAware：回传beanName给bean对象。</li>
+<li>BeanClassLoaderAware：回传classLoader给bean对象。</li>
+<li>BeanFactoryAware：回传beanFactory给对象。</li>
+</ol>
+<h4 id="11-初始化前"><a href="#11-初始化前" class="headerlink" title="11. 初始化前"></a>11. 初始化前</h4><p>初始化前，也是Spring提供的一个扩展点：**BeanPostProcessor.postProcessBeforeInitialization()**，比如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZhouyuBeanPostProcessor</span> <span class="keyword">implements</span> <span class="title">BeanPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;初始化前&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> bean;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用初始化前，可以对进行了依赖注入的Bean进行处理。</p>
+<p>在Spring源码中：</p>
+<ol>
+<li><p>InitDestroyAnnotationBeanPostProcessor会在初始化前这个步骤中执行@PostConstruct的方法，</p>
+</li>
+<li><p>ApplicationContextAwareProcessor会在初始化前这个步骤中进行其他Aware的回调：</p>
+</li>
+<li><ol>
+<li>EnvironmentAware：回传环境变量</li>
+<li>EmbeddedValueResolverAware：回传占位符解析器</li>
+<li>ResourceLoaderAware：回传资源加载器</li>
+<li>ApplicationEventPublisherAware：回传事件发布器</li>
+<li>MessageSourceAware：回传国际化资源</li>
+<li>ApplicationStartupAware：回传应用其他监听对象，可忽略</li>
+<li>ApplicationContextAware：回传Spring容器ApplicationContext</li>
+</ol>
+</li>
+</ol>
+<h4 id="12-初始化"><a href="#12-初始化" class="headerlink" title="12. 初始化"></a>12. 初始化</h4><ol>
+<li>查看当前Bean对象是否实现了InitializingBean接口，如果实现了就调用其afterPropertiesSet()方法</li>
+<li>执行BeanDefinition中指定的初始化方法</li>
+</ol>
+<h4 id="13-初始化后"><a href="#13-初始化后" class="headerlink" title="13. 初始化后"></a>13. 初始化后</h4><p>这是Bean创建生命周期中的最后一个步骤，也是Spring提供的一个扩展点：**BeanPostProcessor.postProcessAfterInitialization()**，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceBeanPostProcessor</span> <span class="keyword">implements</span> <span class="title">BeanPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;初始化后&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> bean;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以在这个步骤中，对Bean最终进行处理，Spring中的<strong>AOP就是基于初始化后实现</strong>的，<strong>初始化后返回的对象才是最终的Bean对象</strong>。</p>
+<h3 id="Bean的销毁"><a href="#Bean的销毁" class="headerlink" title="Bean的销毁"></a>Bean的销毁</h3><p>Bean销毁是发送在Spring容器关闭过程中的。</p>
+<p>在Spring容器关闭时，比如：在Bean创建过程中，在最后（初始化之后），有一个步骤会去判断当前创建的Bean是不是DisposableBean：<br>1.当前Bean是否实现了DisposableBean接口<br>2.或者，当前Bean是否实现了AutoCloseable接口<br>3.BeanDefinition中是否指定了destroyMethod<br>4.调用DestructionAwareBeanPostProcessor.requiresDestruction(bean)进行判断<br>ApplicationListenerDetector中直接使得ApplicationListener是DisposableBean<br>bInitDestroyAnnotationBeanPostProcessor中使得拥有@PreDestroy注解了的方法就是DisposableBean<br>5把符合上述任意一个条件的Bean适配成DisposableBeanAdapter对象，并存入disposableBeans中（一个LinkedHashMap）</p>
+<p>在Spring容器关闭过程时：<br>1首先发布ContextClosedEvent事件<br>2调用lifecycleProcessor的onCloese()方法<br>3销毁单例Bean<br>a遍历disposableBeans<br>ⅰ把每个disposableBean从单例池中移除<br>ⅱ调用disposableBean的destroy()<br>ⅲ如果这个disposableBean还被其他Bean依赖了，那么也得销毁其他Bean<br>ⅳ如果这个disposableBean还包含了inner beans，将这些Bean从单例池中移除掉<br>b清空manualSingletonNames，是一个Set，存的是用户手动注册的单例Bean的beanName<br>c清空allBeanNamesByType，是一个Map，key是bean类型，value是该类型所有的beanName数组<br>d清空singletonBeanNamesByType，和allBeanNamesByType类似，只不过只存了单例Bean</p>
+<p>这里涉及到一个设计模式：<strong>适配器模式</strong></p>
+<p>在销毁时，Spring会找出实现了DisposableBean接口的Bean。</p>
+<p>但是我们在定义一个Bean时，如果这个Bean实现了DisposableBean接口，或者实现了AutoCloseable接口，或者在BeanDefinition中指定了destroyMethodName，那么这个Bean都属于“DisposableBean”，这些Bean在容器关闭时都要调用相应的销毁方法。</p>
+<p>所以，这里就需要进行适配，将实现了DisposableBean接口、或者AutoCloseable接口等适配成实现了DisposableBean接口，所以就用到了DisposableBeanAdapter。</p>
+<p>会把实现了AutoCloseable接口的类封装成DisposableBeanAdapter，而DisposableBeanAdapter实现了DisposableBean接口。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>InstantiationAwareBeanPostProcessor.postProcessBeforeInstantiation()</li>
+<li>实例化</li>
+<li>MergedBeanDefinitionPostProcessor.postProcessMergedBeanDefinition()</li>
+<li>InstantiationAwareBeanPostProcessor.postProcessAfterInstantiation()</li>
+<li>自动注入</li>
+<li>InstantiationAwareBeanPostProcessor.postProcessProperties()</li>
+<li>Aware对象</li>
+<li>BeanPostProcessor.postProcessBeforeInitialization()</li>
+<li>初始化</li>
+<li>BeanPostProcessor.postProcessAfterInitialization()</li>
+</ol>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/17/thread_state/" class="archive-article-date">
-  	<time datetime="2021-12-16T16:16:09.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/17/thread_state/">java多线程-并发编程的开始</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E6%B5%85%E7%9C%8B/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/13/netty_helloworld/" class="archive-article-date">
-  	<time datetime="2021-12-13T15:13:12.881Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-13</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2022/10/07/springIoc/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/10/06/spring%E4%B8%AD%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%A9%E4%BB%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/13/netty_helloworld/">netty入门</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/08/factoryMethod/" class="archive-article-date">
-  	<time datetime="2021-12-08T15:19:10.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/08/factoryMethod/">工厂方法模式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/06/designMoedl/" class="archive-article-date">
-  	<time datetime="2021-12-06T14:34:17.834Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/06/designMoedl/">二十三种设计模式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/02/redBlackTree/" class="archive-article-date">
-  	<time datetime="2021-12-02T13:47:16.011Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/02/redBlackTree/">hashmap中的红黑树</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/01/hashmap/" class="archive-article-date">
-  	<time datetime="2021-12-01T12:48:50.923Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/01/hashmap/">hashmap</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -350,8 +421,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

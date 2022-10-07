@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives: 2021/12 | like winter</title>
+  <title>like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="1234title: spring中的核心date: 2021-05-04tags:spring: sorce-code BeanDefinitionBeanDefinition表示Bean定义，BeanDefinition中存在很多属性用来描述一个Bean的特点。比如：  class，表示Bean类型 scope，表示Bean作用域，单例或原型等 lazyInit：表示Bean是否是懒加载 in">
+<meta property="og:type" content="article">
 <meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/2021/12/index.html">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/spring%E4%B8%AD%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%A9%E4%BB%B6/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="1234title: spring中的核心date: 2021-05-04tags:spring: sorce-code BeanDefinitionBeanDefinition表示Bean定义，BeanDefinition中存在很多属性用来描述一个Bean的特点。比如：  class，表示Bean类型 scope，表示Bean作用域，单例或原型等 lazyInit：表示Bean是否是懒加载 in">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="e:/blog/source_posts/img/listblaeFac.png">
+<meta property="og:image" content="e:/blog/source_posts/img/annotaionapplication.png">
+<meta property="og:image" content="e:/blog/source_posts/img/xmlclaasspathapp.png">
+<meta property="article:published_time" content="2022-10-06T12:52:30.614Z">
+<meta property="article:modified_time" content="2022-10-07T01:52:24.345Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="e:/blog/source_posts/img/listblaeFac.png">
   
     <link rel="alternative" href="/atom.xml" title="like winter" type="application/atom+xml">
   
@@ -150,184 +158,245 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-spring中的核心物件" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title: spring中的核心</span><br><span class="line">date: 2021-05-04</span><br><span class="line">tags:</span><br><span class="line">spring: sorce-code</span><br></pre></td></tr></table></figure>
+<h5 id="BeanDefinition"><a href="#BeanDefinition" class="headerlink" title="BeanDefinition"></a>BeanDefinition</h5><p>BeanDefinition表示Bean定义，BeanDefinition中存在很多属性用来描述一个Bean的特点。比如：</p>
+<ul>
+<li>class，表示Bean类型</li>
+<li>scope，表示Bean作用域，单例或原型等</li>
+<li>lazyInit：表示Bean是否是懒加载</li>
+<li>initMethodName：表示Bean初始化时要执行的方法</li>
+<li>destroyMethodName：表示Bean销毁时要执行的方法</li>
+<li>还有很多…</li>
+</ul>
+<p>在Spring中，我们经常会通过以下几种方式来定义Bean：</p>
+<ol>
+<li><bean/></li>
+<li>@Bean</li>
+<li>@Component(@Service,@Controller)</li>
+</ol>
+<p>我们还可以<strong>编程式定义Bean</strong>，那就是直接通过BeanDefinition，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">AnnotationConfigApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成一个BeanDefinition对象，并设置beanClass为User.class，并注册到ApplicationContext中</span></span><br><span class="line">AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();</span><br><span class="line"><span class="comment">// 通过BeanDefinition设置一个Bean的其他属性</span></span><br><span class="line">beanDefinition.setScope(<span class="string">&quot;prototype&quot;</span>); <span class="comment">// 设置作用域</span></span><br><span class="line">beanDefinition.setInitMethodName(<span class="string">&quot;init&quot;</span>); <span class="comment">// 设置初始化方法</span></span><br><span class="line">beanDefinition.setLazyInit(<span class="keyword">true</span>); <span class="comment">// 设置懒加载</span></span><br><span class="line">beanDefinition.setBeanClass(User.class);</span><br><span class="line">context.registerBeanDefinition(<span class="string">&quot;user&quot;</span>, beanDefinition);</span><br><span class="line"></span><br><span class="line">System.out.println(context.getBean(<span class="string">&quot;user&quot;</span>));</span><br></pre></td></tr></table></figure>
+<h4 id="BeanDefinitionReader"><a href="#BeanDefinitionReader" class="headerlink" title="BeanDefinitionReader"></a>BeanDefinitionReader</h4><p>读取器，直接把某个类转换为BeanDefinition</p>
+<p>子类：AnnotatedBeanDefinitionReader，增加了解析注解功能（@Conditional，**@Scope**、@Lazy、@Primary、@DependsOn、@Role、@Description）；XmlBeanDefinitionReader：可以解析<bean/>标签</p>
+<h4 id="ClassPathBeanDefinitionScanner"><a href="#ClassPathBeanDefinitionScanner" class="headerlink" title="ClassPathBeanDefinitionScanner"></a>ClassPathBeanDefinitionScanner</h4><p>ClassPathBeanDefinitionScanner是扫描器，但是它的作用和BeanDefinitionReader类似，它可以进行扫描，扫描某个包路径，对扫描到的类进行解析，比如，扫描到的类上如果存在@Component注解，那么就会把这个类解析为一个BeanDefinition</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AnnotationConfigApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line">context.refresh();</span><br><span class="line"></span><br><span class="line">ClassPathBeanDefinitionScanner scanner = <span class="keyword">new</span> ClassPathBeanDefinitionScanner(context);</span><br><span class="line">scanner.scan(<span class="string">&quot;com.springcore&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(context.getBean(<span class="string">&quot;userService&quot;</span>));</span><br></pre></td></tr></table></figure>
+<h4 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h4><p>bean工厂，负责创建ben获取bean的API</p>
+<p>ApplicationContext是bean工厂的一种，定义如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ApplicationContext</span> <span class="keyword">extends</span> <span class="title">EnvironmentCapable</span>, <span class="title">ListableBeanFactory</span>, <span class="title">HierarchicalBeanFactory</span>,</span></span><br><span class="line"><span class="class">		<span class="title">MessageSource</span>, <span class="title">ApplicationEventPublisher</span>, <span class="title">ResourcePatternResolver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Java中，接口是可以<strong>多继承</strong>的，我们发现ApplicationContext继承了ListableBeanFactory和HierarchicalBeanFactory，而ListableBeanFactory和HierarchicalBeanFactory都继承至BeanFactory，所以我们可以认为ApplicationContext继承了BeanFactory，ApplicationContext也是BeanFactory的一种，拥有BeanFactory支持的所有功能，不过ApplicationContext比BeanFactory更加强大，ApplicationContext还基础了其他接口，也就表示ApplicationContext还拥有其他功能，比如MessageSource表示国际化，ApplicationEventPublisher表示事件发布，EnvironmentCapable表示获取环境变量，等等</p>
+<h4 id="DefaultListable"><a href="#DefaultListable" class="headerlink" title="DefaultListable"></a>DefaultListable</h4><p><img src="E:\blog\source_posts\img\listblaeFac.png" alt="image.png"></p>
+<p>实现了很多接口：</p>
+<ol>
+<li>AliasRegistry：支持别名功能，一个名字可以对应多个别名</li>
+<li>BeanDefinitionRegistry：可以注册、保存、移除、获取某个BeanDefinition</li>
+<li>BeanFactory：Bean工厂，可以根据某个bean的名字、或类型、或别名获取某个Bean对象</li>
+<li>SingletonBeanRegistry：可以直接注册、获取某个单例Bean</li>
+<li>SimpleAliasRegistry：它是一个类，实现了AliasRegistry接口中所定义的功能，支持别名功能</li>
+<li>ListableBeanFactory：在BeanFactory的基础上，增加了其他功能，可以获取所有BeanDefinition的beanNames，可以根据某个类型获取对应的beanNames，可以根据某个类型获取{类型：对应的Bean}的映射关系</li>
+<li>HierarchicalBeanFactory：在BeanFactory的基础上，添加了获取父BeanFactory的功能</li>
+<li>DefaultSingletonBeanRegistry：它是一个类，实现了SingletonBeanRegistry接口，拥有了直接注册、获取某个单例Bean的功能</li>
+<li>ConfigurableBeanFactory：在HierarchicalBeanFactory和SingletonBeanRegistry的基础上，添加了设置父BeanFactory、类加载器（表示可以指定某个类加载器进行类的加载）、设置Spring EL表达式解析器（表示该BeanFactory可以解析EL表达式）、设置类型转化服务（表示该BeanFactory可以进行类型转化）、可以添加BeanPostProcessor（表示该BeanFactory支持Bean的后置处理器），可以合并BeanDefinition，可以销毁某个Bean等等功能</li>
+<li>FactoryBeanRegistrySupport：支持了FactoryBean的功能</li>
+<li>AutowireCapableBeanFactory：是直接继承了BeanFactory，在BeanFactory的基础上，支持在创建Bean的过程中能对Bean进行自动装配</li>
+<li>AbstractBeanFactory：实现了ConfigurableBeanFactory接口，继承了FactoryBeanRegistrySupport，这个BeanFactory的功能已经很全面了，但是不能自动装配和获取beanNames</li>
+<li>ConfigurableListableBeanFactory：继承了ListableBeanFactory、AutowireCapableBeanFactory、ConfigurableBeanFactory</li>
+<li>AbstractAutowireCapableBeanFactory：继承了AbstractBeanFactory，实现了AutowireCapableBeanFactory，拥有了自动装配的功能</li>
+<li>DefaultListableBeanFactory：继承了AbstractAutowireCapableBeanFactory，实现了ConfigurableListableBeanFactory接口和BeanDefinitionRegistry接口，所以DefaultListableBeanFactory的功能很强大</li>
+</ol>
+<h4 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h4><p>上面有分析到，ApplicationContext是个接口，实际上也是一个BeanFactory，不过比BeanFactory更加强大，比如：</p>
+<ol>
+<li>HierarchicalBeanFactory：拥有获取父BeanFactory的功能</li>
+<li>ListableBeanFactory：拥有获取beanNames的功能</li>
+<li>ResourcePatternResolver：资源加载器，可以一次性获取多个资源（文件资源等等）</li>
+<li>EnvironmentCapable：可以获取运行时环境（没有设置运行时环境功能）</li>
+<li>ApplicationEventPublisher：拥有广播事件的功能（没有添加事件监听器的功能）</li>
+<li>MessageSource：拥有国际化功能</li>
+</ol>
+<p>两个常用关键实现类</p>
+<h4 id="AnnotationConfigApplicationContext"><a href="#AnnotationConfigApplicationContext" class="headerlink" title="AnnotationConfigApplicationContext"></a>AnnotationConfigApplicationContext</h4><p><img src="E:\blog\source_posts\img\annotaionapplication.png" alt="image.png"></p>
+<ol>
+<li>ConfigurableApplicationContext：继承了ApplicationContext接口，增加了，添加事件监听器、添加BeanFactoryPostProcessor、设置Environment，获取ConfigurableListableBeanFactory等功能</li>
+<li>AbstractApplicationContext：实现了ConfigurableApplicationContext接口</li>
+<li>GenericApplicationContext：继承了AbstractApplicationContext，实现了BeanDefinitionRegistry接口，拥有了所有ApplicationContext的功能，并且可以注册BeanDefinition，注意这个类中有一个属性(DefaultListableBeanFactory <strong>beanFactory</strong>)</li>
+<li>AnnotationConfigRegistry：可以单独注册某个为类为BeanDefinition（可以处理该类上的**@Configuration注解<strong>，已经可以处理</strong>@Bean注解**），同时可以扫描</li>
+<li>AnnotationConfigApplicationContext：继承了GenericApplicationContext，实现了AnnotationConfigRegistry接口，拥有了以上所有的功能</li>
+</ol>
+<h4 id="ClassPathXmlApplicationContext"><a href="#ClassPathXmlApplicationContext" class="headerlink" title="ClassPathXmlApplicationContext"></a>ClassPathXmlApplicationContext</h4><p><img src="E:\blog\source_posts\img\xmlclaasspathapp.png" alt="image.png"></p>
+<p>它也是继承了AbstractApplicationContext，但是相对于AnnotationConfigApplicationContext而言，功能没有AnnotationConfigApplicationContext强大，比如不能注册BeanDefinition</p>
+<h4 id="国际化"><a href="#国际化" class="headerlink" title="国际化"></a>国际化</h4><p>eg：MessageSource 有了这个Bean，你可以在你任意想要进行国际化的地方使用该MessageSource</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> MessageSource <span class="title">messageSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	ResourceBundleMessageSource messageSource = <span class="keyword">new</span> ResourceBundleMessageSource();</span><br><span class="line">	messageSource.setBasename(<span class="string">&quot;messages&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> messageSource;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 因为ApplicationContext也拥有国家化的功能，所以可以直接这么用</span></span><br><span class="line">context.getMessage(<span class="string">&quot;test&quot;</span>, <span class="keyword">null</span>, <span class="keyword">new</span> Locale(<span class="string">&quot;en_CN&quot;</span>))</span><br></pre></td></tr></table></figure>
+<h4 id="ResourceLoad"><a href="#ResourceLoad" class="headerlink" title="ResourceLoad"></a>ResourceLoad</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ApplicationContext还拥有资源加载的功能，比如，可以直接利用ApplicationContext获取某个文件的内容</span></span><br><span class="line">AnnotationConfigApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">Resource resource = context.getResource(<span class="string">&quot;file://D:\\IdeaProjects\\spring-framework-5.3.10\\tuling\\src\\main\\java\\com\\zhouyu\\service\\UserService.java&quot;</span>);</span><br><span class="line">System.out.println(resource.contentLength());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一次获取多个</span></span><br><span class="line">Resource[] resources = context.getResources(<span class="string">&quot;classpath:com/zhouyu/*.class&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (Resource resource : resources) &#123;</span><br><span class="line">	System.out.println(resource.contentLength());</span><br><span class="line">	System.out.println(resource.getFilename());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="EventBus"><a href="#EventBus" class="headerlink" title="EventBus"></a>EventBus</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 监听事件</span><br><span class="line">@Bean</span><br><span class="line">public ApplicationListener applicationListener() &#123;</span><br><span class="line">	return new ApplicationListener() &#123;</span><br><span class="line">		@Override</span><br><span class="line">		public void onApplicationEvent(ApplicationEvent event) &#123;</span><br><span class="line">			System.out.println(&quot;接收到了一个事件&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 事件发布</span><br><span class="line">context.publishEvent(&quot;on&quot;);</span><br></pre></td></tr></table></figure>
+<h4 id="TypeConverter"><a href="#TypeConverter" class="headerlink" title="TypeConverter"></a>TypeConverter</h4><p>在Spring源码中，有可能需要把String转成其他类型，所以在Spring源码中提供了一些技术来更方便的做对象的类型转化，关于类型转化的应用场景</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SimpleTypeConverter typeConverter = <span class="keyword">new</span> SimpleTypeConverter();</span><br><span class="line">typeConverter.registerCustomEditor(User.class, <span class="keyword">new</span> StringToUserPropertyEditor());</span><br><span class="line"><span class="comment">//typeConverter.setConversionService(conversionService);</span></span><br><span class="line">User value = typeConverter.convertIfNecessary(<span class="string">&quot;1&quot;</span>, User.class);</span><br><span class="line">System.out.println(value);</span><br></pre></td></tr></table></figure>
+<h4 id="OrderComparator"><a href="#OrderComparator" class="headerlink" title="OrderComparator"></a>OrderComparator</h4><p>OrderComparator是Spring所提供的一种比较器，可以用来根据@Order注解或实现Ordered接口来执行值进行笔记，从而可以进行排序。</p>
+<p>另外，Spring中还提供了一个OrderComparator的子类：<strong>AnnotationAwareOrderComparator</strong>，它支持用@Order来指定order值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Order(3)</span><br><span class="line">public class A &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public String toString() &#123;</span><br><span class="line">		return this.getClass().getSimpleName();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="BeanPostProcessor"><a href="#BeanPostProcessor" class="headerlink" title="BeanPostProcessor"></a>BeanPostProcessor</h4><p>BeanPostProcess表示Bena的后置处理器，我们可以定义一个或多个BeanPostProcessor，比如通过一下代码定义一个BeanPostProcessor：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个BeanPostProcessor可以在**任意一个Bean**的**初始化之前**以及**初始化之后**去额外的做一些用户自定义的逻辑，当然，我们可以通过判断beanName来进行针对性处理（针对某个Bean，或某部分Bean）</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceBeanPostProcessor</span> <span class="keyword">implements</span> <span class="title">BeanPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;初始化前&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> bean;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="string">&quot;userService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;初始化后&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> bean;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 我们可以通过定义BeanPostProcessor来干涉Spring创建Bean的过程。</span></span><br></pre></td></tr></table></figure>
+<h4 id="BeanFactoryPostProcessor"><a href="#BeanFactoryPostProcessor" class="headerlink" title="BeanFactoryPostProcessor"></a>BeanFactoryPostProcessor</h4><p>BeanFactoryPostProcessor表示Bean工厂的后置处理器，其实和BeanPostProcessor类似，BeanPostProcessor是干涉Bean的创建过程，BeanFactoryPostProcessor是干涉BeanFactory的创建过程。比如，我们可以这样定义一个BeanFactoryPostProcessor：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceBeanFactoryPostProcessor</span> <span class="keyword">implements</span> <span class="title">BeanFactoryPostProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;加工beanFactory&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 我们可以在postProcessBeanFactory()方法中对BeanFactory进行加工。</span></span><br></pre></td></tr></table></figure>
+<h4 id="FactoryBean"><a href="#FactoryBean" class="headerlink" title="FactoryBean"></a>FactoryBean</h4><p>上面提到，我们可以通过BeanPostPorcessor来干涉Spring创建Bean的过程，但是如果我们想一个Bean完完全全由我们来创造，也是可以的，比如通过FactoryBean：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceFactoryBean</span> <span class="keyword">implements</span> <span class="title">FactoryBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		UserService userService = <span class="keyword">new</span> UserService();</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> userService;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> Class&lt;?&gt; getObjectType() &#123;</span><br><span class="line">		<span class="keyword">return</span> UserService.class;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 通过这种方式创造出来的UserService的Bean，只会经过初始化后，其他Spring的生命周期步骤是不会经过的，比如依赖注入</span></span><br><span class="line"><span class="comment">// @Bean定义的Bean是会经过完整的Bean生命周期的</span></span><br></pre></td></tr></table></figure>
+<h4 id="MetadataReader、ClassMetadata、AnnotationMetadata"><a href="#MetadataReader、ClassMetadata、AnnotationMetadata" class="headerlink" title="MetadataReader、ClassMetadata、AnnotationMetadata"></a>MetadataReader、ClassMetadata、AnnotationMetadata</h4><p>Spring中需要去解析类的信息，比如类名、类中的方法、类上的注解，这些都可以称之为类的元数据，所以Spring中对类的元数据做了抽象，并提供了一些工具类。</p>
+<p>MetadataReader表示类的元数据读取器，默认实现类为<strong>SimpleMetadataReader</strong></p>
+<p>解析时使用了ASM技术，不用启动时将所有的类都加载进JVM</p>
+<p>MetadataReader表示类的元数据读取器，主要包含了一个AnnotationMetadata，功能有</p>
+<ol>
+<li>获取类的名字、</li>
+<li>获取父类的名字</li>
+<li>获取所实现的所有接口名</li>
+<li>获取所有内部类的名字</li>
+<li>判断是不是抽象类</li>
+<li>判断是不是接口</li>
+<li>判断是不是一个注解</li>
+<li>获取拥有某个注解的方法集合</li>
+<li>获取类上添加的所有注解信息</li>
+<li>获取类上添加的所有注解类型集合</li>
+</ol>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/17/thread_state/" class="archive-article-date">
-  	<time datetime="2021-12-16T16:16:09.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/17/thread_state/">java多线程-并发编程的开始</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/spring%E4%B8%AD%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%A9%E4%BB%B6/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/13/netty_helloworld/" class="archive-article-date">
-  	<time datetime="2021-12-13T15:13:12.881Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-13</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2022/10/06/bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E6%B5%85%E7%9C%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/10/06/spring_newObj/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/13/netty_helloworld/">netty入门</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/08/factoryMethod/" class="archive-article-date">
-  	<time datetime="2021-12-08T15:19:10.646Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/08/factoryMethod/">工厂方法模式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/06/designMoedl/" class="archive-article-date">
-  	<time datetime="2021-12-06T14:34:17.834Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/06/designMoedl/">二十三种设计模式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/02/redBlackTree/" class="archive-article-date">
-  	<time datetime="2021-12-02T13:47:16.011Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/02/redBlackTree/">hashmap中的红黑树</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/01/hashmap/" class="archive-article-date">
-  	<time datetime="2021-12-01T12:48:50.923Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/01/hashmap/">hashmap</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -350,8 +419,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
