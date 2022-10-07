@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>like winter</title>
+  <title>spring_newObj | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1234title: spring对象创建date: 2021-05-01tags:spring: sorce-code 1.Spring底层核心原理解析123AnnotationConfigApplicationContext context &#x3D; new AnnotationConfigApplicationContext(AppConfig.class);UserService userSer">
+  <meta name="description" content="1.Spring底层核心原理解析123AnnotationConfigApplicationContext context &#x3D; new AnnotationConfigApplicationContext(AppConfig.class);UserService userService &#x3D; (UserService) context.getBean(&quot;userService&quot;)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/spring_newObj/index.html">
+<meta property="og:title" content="spring_newObj">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/05/01/spring_newObj/index.html">
 <meta property="og:site_name" content="like winter">
-<meta property="og:description" content="1234title: spring对象创建date: 2021-05-01tags:spring: sorce-code 1.Spring底层核心原理解析123AnnotationConfigApplicationContext context &#x3D; new AnnotationConfigApplicationContext(AppConfig.class);UserService userSer">
+<meta property="og:description" content="1.Spring底层核心原理解析123AnnotationConfigApplicationContext context &#x3D; new AnnotationConfigApplicationContext(AppConfig.class);UserService userService &#x3D; (UserService) context.getBean(&quot;userService&quot;)">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-10-06T08:10:08.026Z">
-<meta property="article:modified_time" content="2022-10-06T12:27:16.098Z">
+<meta property="article:published_time" content="2022-05-01T07:21:44.000Z">
+<meta property="article:modified_time" content="2022-10-07T08:32:02.709Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -157,10 +157,24 @@
             <article id="post-spring_newObj" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      spring_newObj
+    </h1>
+  
+
+        
+        <a href="/2022/05/01/spring_newObj/" class="archive-article-date">
+  	<time datetime="2022-05-01T07:21:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-01</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title: spring对象创建</span><br><span class="line">date: 2021-05-01</span><br><span class="line">tags:</span><br><span class="line">spring: sorce-code</span><br></pre></td></tr></table></figure>
-<h4 id="1-Spring底层核心原理解析"><a href="#1-Spring底层核心原理解析" class="headerlink" title="1.Spring底层核心原理解析"></a>1.Spring底层核心原理解析</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnnotationConfigApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line">UserService userService = (UserService) context.getBean(<span class="string">&quot;userService&quot;</span>);</span><br><span class="line">userService.test();</span><br></pre></td></tr></table></figure>
+        <h4 id="1-Spring底层核心原理解析"><a href="#1-Spring底层核心原理解析" class="headerlink" title="1.Spring底层核心原理解析"></a>1.Spring底层核心原理解析</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnnotationConfigApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line">UserService userService = (UserService) context.getBean(<span class="string">&quot;userService&quot;</span>);</span><br><span class="line">userService.test();</span><br></pre></td></tr></table></figure>
 <p>不管是AnnotationConfigApplicationContext还是ClassPathXmlApplicationContext，目前，我们都可以简单的将它们理解为就是用来创建Java对象的，比如调用getBean()就会去创建对象</p>
 <p>当我们调用context.getBean(“userService”)时，就会去创建一个对象，但是getBean方法内部怎么知道”userService”对应的是UserService类呢？</p>
 <p>所以，我们就可以分析出来，在调用AnnotationConfigApplicationContext的构造方法时，也就是第一行代码，会去做一些事情：</p>
@@ -287,7 +301,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/10/06/spring_newObj/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/05/01/spring_newObj/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -300,15 +314,6 @@
 
   
 <nav id="article-nav">
-  
-    <a href="/2022/10/06/spring%E4%B8%AD%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%A9%E4%BB%B6/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
   
   
     <a href="/2021/12/17/thread_state/" id="article-nav-older" class="article-nav-link-wrap">

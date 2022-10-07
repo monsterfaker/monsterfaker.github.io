@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>like winter</title>
+  <title>springAOP | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1234title: spring启动过程date: 2021-06-02tags:spring: sorce-code 通常，我们说的Spring启动，就是构造ApplicationContext对象以及调用refresh()方法的过程。 主要做几件事：  构造一个BeanFactory对象  解析配置类，得到BeanDefinition，并注册到BeanFactory中   解析@Compon">
+  <meta name="description" content="动态代理代理模式：为其他对象提供一种代理以控制对这个对象的访问，增强一个类中的某个方法，对程序进行扩展。 1234567public class UserService  &amp;#123;	public void test() &amp;#123;		System.out.println(&quot;test...&quot;);	&amp;#125;&amp;#125; 如果我们现在想在不修改UserService类的源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/10/07/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="springAOP">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/06/08/springAOP/index.html">
 <meta property="og:site_name" content="like winter">
-<meta property="og:description" content="1234title: spring启动过程date: 2021-06-02tags:spring: sorce-code 通常，我们说的Spring启动，就是构造ApplicationContext对象以及调用refresh()方法的过程。 主要做几件事：  构造一个BeanFactory对象  解析配置类，得到BeanDefinition，并注册到BeanFactory中   解析@Compon">
+<meta property="og:description" content="动态代理代理模式：为其他对象提供一种代理以控制对这个对象的访问，增强一个类中的某个方法，对程序进行扩展。 1234567public class UserService  &amp;#123;	public void test() &amp;#123;		System.out.println(&quot;test...&quot;);	&amp;#125;&amp;#125; 如果我们现在想在不修改UserService类的源码">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-10-07T02:53:42.337Z">
-<meta property="article:modified_time" content="2022-10-07T07:38:19.395Z">
+<meta property="article:published_time" content="2021-06-08T15:21:51.000Z">
+<meta property="article:modified_time" content="2022-10-07T08:27:22.083Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -154,219 +154,114 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-spring启动过程分析" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-springAOP" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springAOP
+    </h1>
+  
+
+        
+        <a href="/2021/06/08/springAOP/" class="archive-article-date">
+  	<time datetime="2021-06-08T15:21:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-08</time>
+</a>
+        
+      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title: spring启动过程</span><br><span class="line">date: 2021-06-02</span><br><span class="line">tags:</span><br><span class="line">spring: sorce-code</span><br></pre></td></tr></table></figure>
-<p>通常，我们说的Spring启动，就是构造ApplicationContext对象以及调用refresh()方法的过程。</p>
-<p>主要做几件事：</p>
+        <h4 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h4><p>代理模式：为<strong>其他对象</strong>提供一种<strong>代理</strong>以控制对这个对象的访问，增强一个类中的某个方法，对程序进行扩展。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span>  </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;test...&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果我们现在想在<strong>不修改UserService类的源码</strong>前提下，给test()增加额外逻辑，那么就可以使用动态代理机制来创建UserService对象了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">UserService target = <span class="keyword">new</span> UserService();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过cglib技术</span></span><br><span class="line">Enhancer enhancer = <span class="keyword">new</span> Enhancer();</span><br><span class="line">enhancer.setSuperclass(UserService.class);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义额外逻辑，也就是代理逻辑</span></span><br><span class="line">enhancer.setCallbacks(<span class="keyword">new</span> Callback[]&#123;<span class="keyword">new</span> MethodInterceptor() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;before...&quot;</span>);</span><br><span class="line">		Object result = methodProxy.invoke(target, objects);</span><br><span class="line">		System.out.println(<span class="string">&quot;after...&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态代理所创建出来的UserService对象</span></span><br><span class="line">UserService userService = (UserService) enhancer.create();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行这个userService的test方法时，就会额外会执行一些其他逻辑</span></span><br><span class="line">userService.test();</span><br></pre></td></tr></table></figure>
+<p>通过cglib来实现的代理对象的创建，是基于<strong>父子类</strong>的，被代理类（UserService）是父类，代理类是子类，代理对象就是代理类的实例对象，代理类是由cglib创建的，对于程序员来说不用关心。</p>
+<p>除开cglib技术，jdk本身也提供了一种创建代理对象的动态代理机制，但是它只能代理接口，也就是UserService得先有一个接口才能利用jdk动态代理机制来生成一个代理对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserInterface</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> <span class="keyword">implements</span> <span class="title">UserInterface</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;test...&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">UserService target = <span class="keyword">new</span> UserService();</span><br><span class="line"></span><br><span class="line"><span class="comment">// UserInterface接口的代理对象</span></span><br><span class="line">Object proxy = Proxy.newProxyInstance(UserService.class.getClassLoader(), <span class="keyword">new</span> Class[]&#123;UserInterface.class&#125;, <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;before...&quot;</span>);</span><br><span class="line">		Object result = method.invoke(target, args);</span><br><span class="line">		System.out.println(<span class="string">&quot;after...&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">UserInterface userService = (UserInterface) proxy;</span><br><span class="line">userService.test();</span><br></pre></td></tr></table></figure>
+<h4 id="ProxyFactory"><a href="#ProxyFactory" class="headerlink" title="ProxyFactory"></a>ProxyFactory</h4><p>Spring中进行了封装，封装出来的类叫做ProxyFactory，表示是创建代理对象的一个工厂，使用起来会比上面的更加方便，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">UserService target = <span class="keyword">new</span> UserService();</span><br><span class="line"></span><br><span class="line">ProxyFactory proxyFactory = <span class="keyword">new</span> ProxyFactory();</span><br><span class="line">proxyFactory.setTarget(target);</span><br><span class="line">proxyFactory.addAdvice(<span class="keyword">new</span> MethodInterceptor() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(MethodInvocation invocation)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;before...&quot;</span>);</span><br><span class="line">		Object result = invocation.proceed();</span><br><span class="line">		System.out.println(<span class="string">&quot;after...&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">UserInterface userService = (UserInterface) proxyFactory.getProxy();</span><br><span class="line">userService.test();</span><br></pre></td></tr></table></figure>
+<p>通过ProxyFactory，我们可以不再关系到底是用cglib还是jdk动态代理了，ProxyFactory会帮我们去判断，如果UserService实现了接口，那么ProxyFactory底层就会用jdk动态代理，如果没有实现接口，就会用cglib</p>
+<h4 id="Advice的分类"><a href="#Advice的分类" class="headerlink" title="Advice的分类"></a>Advice的分类</h4><ol>
+<li>Before Advice：方法之前执行</li>
+<li>After returning advice：方法return后执行</li>
+<li>After throwing advice：方法抛异常后执行</li>
+<li>After (finally) advice：方法执行完finally之后执行，这是最后的，比return更后</li>
+<li>Around advice：这是功能最强大的Advice，可以自定义执行顺序</li>
+</ol>
+<h4 id="Advisor的理解"><a href="#Advisor的理解" class="headerlink" title="Advisor的理解"></a>Advisor的理解</h4><p>跟Advice类似的还有一个Advisor的概念，一个Advisor是有一个Pointcut和一个Advice组成的，通过Pointcut可以指定要需要被代理的逻辑，比如一个UserService类中有两个方法，按上面的例子，这两个方法都会被代理，被增强，那么我们现在可以通过Advisor，来控制到具体代理哪一个方法，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">UserService target = <span class="keyword">new</span> UserService();</span><br><span class="line">ProxyFactory proxyFactory = <span class="keyword">new</span> ProxyFactory();</span><br><span class="line">proxyFactory.setTarget(target);</span><br><span class="line">proxyFactory.addAdvisor(<span class="keyword">new</span> PointcutAdvisor() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Pointcut <span class="title">getPointcut</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> StaticMethodMatcherPointcut() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">matches</span><span class="params">(Method method, Class&lt;?&gt; targetClass)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> method.getName().equals(<span class="string">&quot;testAbc&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Advice <span class="title">getAdvice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MethodInterceptor() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(MethodInvocation invocation)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;before...&quot;</span>);</span><br><span class="line">                Object result = invocation.proceed();</span><br><span class="line">                System.out.println(<span class="string">&quot;after...&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPerInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">UserInterface userService = (UserInterface) proxyFactory.getProxy();</span><br><span class="line">userService.test();</span><br></pre></td></tr></table></figure>
+<p>上面代码表示，产生的代理对象，只有在执行testAbc这个方法时才会被增强，会执行额外的逻辑，而在执行其他方法时是不会增强的</p>
+<h4 id="ProxyFactoryBean"><a href="#ProxyFactoryBean" class="headerlink" title="ProxyFactoryBean"></a>ProxyFactoryBean</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ProxyFactoryBean <span class="title">userServiceProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">	UserService userService = <span class="keyword">new</span> UserService();</span><br><span class="line"></span><br><span class="line">	ProxyFactoryBean proxyFactoryBean = <span class="keyword">new</span> ProxyFactoryBean();</span><br><span class="line">	proxyFactoryBean.setTarget(userService);</span><br><span class="line">	proxyFactoryBean.addAdvice(<span class="keyword">new</span> MethodInterceptor() &#123;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(MethodInvocation invocation)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;before...&quot;</span>);</span><br><span class="line">			Object result = invocation.proceed();</span><br><span class="line">			System.out.println(<span class="string">&quot;after...&quot;</span>);</span><br><span class="line">			<span class="keyword">return</span> result;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	<span class="keyword">return</span> proxyFactoryBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这种方法来定义一个UserService的Bean，并且是经过了AOP的。但是这种方式<strong>只能针对某一个Bean</strong>。它是一个FactoryBean，所以利用的就是FactoryBean技术，间接的将UserService的代理对象作为了Bean。ProxyFactoryBean还有额外的功能，比如可以把某个Advice或Advisor定义成为Bean，然后在ProxyFactoryBean中进行设置</p>
+<p>ProxyFactory在生成代理对象之前需要决定到底是使用JDK动态代理还是CGLIB技术:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config就是ProxyFactory对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// optimize为true,或proxyTargetClass为true,或用户没有给ProxyFactory对象添加interface</span></span><br><span class="line"><span class="keyword">if</span> (config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config)) &#123;</span><br><span class="line">	Class&lt;?&gt; targetClass = config.getTargetClass();</span><br><span class="line">	<span class="keyword">if</span> (targetClass == <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> AopConfigException(<span class="string">&quot;TargetSource cannot determine target class: &quot;</span> +</span><br><span class="line">				<span class="string">&quot;Either an interface or a target is required for proxy creation.&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">// targetClass是接口，直接使用Jdk动态代理</span></span><br><span class="line">	<span class="keyword">if</span> (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> JdkDynamicAopProxy(config);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">// 使用Cglib</span></span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> ObjenesisCglibAopProxy(config);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 使用Jdk动态代理</span></span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> JdkDynamicAopProxy(config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="JdkDynamicAopProxy"><a href="#JdkDynamicAopProxy" class="headerlink" title="JdkDynamicAopProxy"></a>JdkDynamicAopProxy</h4><ol>
+<li>在构造JdkDynamicAopProxy对象时，会先拿到被代理对象自己所实现的接口，并且额外的增加SpringProxy、Advised、DecoratingProxy三个接口，组合成一个Class[]，并赋值给proxiedInterfaces属性</li>
+<li>并且检查这些接口中是否定义了equals()、hashcode()方法</li>
+<li>执行<code>Proxy.newProxyInstance(classLoader, this.proxiedInterfaces, this)</code>，得到代理对象，<strong>JdkDynamicAopProxy</strong>作为InvocationHandler，代理对象在执行某个方法时，会进入到JdkDynamicAopProxy的**invoke()**方法中</li>
+</ol>
+<h4 id="ObjenesisCglibAopProxy"><a href="#ObjenesisCglibAopProxy" class="headerlink" title="ObjenesisCglibAopProxy"></a>ObjenesisCglibAopProxy</h4><ol>
+<li>创建Enhancer对象</li>
+<li>设置Enhancer的superClass为通过ProxyFactory.setTarget()所设置的对象的类</li>
+<li>设置Enhancer的interfaces为通过ProxyFactory.addInterface()所添加的接口，以及SpringProxy、Advised、DecoratingProxy接口</li>
+<li>设置Enhancer的Callbacks为DynamicAdvisedInterceptor</li>
+<li>最后创建一个代理对象，代理对象在执行某个方法时，会进入到DynamicAdvisedInterceptor的intercept()方法中</li>
+</ol>
+<h4 id="代理对象执行过程"><a href="#代理对象执行过程" class="headerlink" title="代理对象执行过程"></a>代理对象执行过程</h4><ol>
+<li>在使用ProxyFactory创建代理对象之前，需要往ProxyFactory先添加Advisor</li>
+<li>代理对象在执行某个方法时，会把ProxyFactory中的Advisor拿出来和当前正在执行的方法进行匹配筛选</li>
+<li>把和方法所匹配的Advisor适配成MethodInterceptor</li>
+<li>把和当前方法匹配的MethodInterceptor链，以及被代理对象、代理对象、代理类、当前Method对象、方法参数封装为MethodInvocation对象</li>
+<li>调用MethodInvocation的proceed()方法，开始执行各个MethodInterceptor以及被代理对象的对应方法</li>
+<li>按顺序调用每个MethodInterceptor的invoke()方法，并且会把MethodInvocation对象传入invoke()方法</li>
+<li>直到执行完最后一个MethodInterceptor了，就会调用invokeJoinpoint()方法，从而执行被代理对象的当前方法</li>
+</ol>
+<h4 id="BeanNameAutoProxyCreator"><a href="#BeanNameAutoProxyCreator" class="headerlink" title="BeanNameAutoProxyCreator"></a>BeanNameAutoProxyCreator</h4><p>ProxyFactoryBean得自己指定被代理的对象，那么我们可以通过BeanNameAutoProxyCreator来通过指定某个bean的名字，来对该bean进行代理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BeanNameAutoProxyCreator <span class="title">beanNameAutoProxyCreator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	BeanNameAutoProxyCreator beanNameAutoProxyCreator = <span class="keyword">new</span> BeanNameAutoProxyCreator();</span><br><span class="line">	beanNameAutoProxyCreator.setBeanNames(<span class="string">&quot;userSe*&quot;</span>);</span><br><span class="line">	beanNameAutoProxyCreator.setInterceptorNames(<span class="string">&quot;springsourceAroundAdvice&quot;</span>);</span><br><span class="line">	beanNameAutoProxyCreator.setProxyTargetClass(<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">return</span> beanNameAutoProxyCreator;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过BeanNameAutoProxyCreator可以对批量的Bean进行AOP，并且指定了代理逻辑，指定了一个InterceptorName，也就是一个Advice，前提条件是这个Advice也得是一个Bean，这样Spring才能找到的，但是BeanNameAutoProxyCreator的缺点很明显，它只能根据beanName来指定想要代理的Bean</p>
+<h4 id="DefaultAdvisorAutoProxyCreator"><a href="#DefaultAdvisorAutoProxyCreator" class="headerlink" title="DefaultAdvisorAutoProxyCreator"></a>DefaultAdvisorAutoProxyCreator</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> DefaultPointcutAdvisor <span class="title">defaultPointcutAdvisor</span><span class="params">()</span></span>&#123;</span><br><span class="line">	NameMatchMethodPointcut pointcut = <span class="keyword">new</span> NameMatchMethodPointcut();</span><br><span class="line">	pointcut.addMethodName(<span class="string">&quot;test&quot;</span>);</span><br><span class="line"></span><br><span class="line">    DefaultPointcutAdvisor defaultPointcutAdvisor = <span class="keyword">new</span> DefaultPointcutAdvisor();</span><br><span class="line">	defaultPointcutAdvisor.setPointcut(pointcut);</span><br><span class="line">	defaultPointcutAdvisor.setAdvice(<span class="keyword">new</span> SpringSourceAfterReturningAdvice());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> defaultPointcutAdvisor;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> DefaultAdvisorAutoProxyCreator <span class="title">defaultAdvisorAutoProxyCreator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = <span class="keyword">new</span> DefaultAdvisorAutoProxyCreator();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> defaultAdvisorAutoProxyCreator;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过DefaultAdvisorAutoProxyCreator会直接去找所有Advisor类型的Bean，根据Advisor中的PointCut和Advice信息，确定要代理的Bean以及代理逻辑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Aspect</span><br><span class="line">@Component</span><br><span class="line">public class ZhouyuAspect &#123;</span><br><span class="line"></span><br><span class="line">	@Before(&quot;execution(public void com.springsource.service.UserService.test())&quot;)</span><br><span class="line">	public void zhouyuBefore(JoinPoint joinPoint) &#123;</span><br><span class="line">		System.out.println(&quot;springsourceBefore&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面这个类，我们就直接定义好了所要代理的方法(通过一个表达式)，以及代理逻辑（被@Before修饰的方法），简单明了，这样对于Spring来说，它要做的就是来解析这些注解了，解析之后得到对应的Pointcut对象、Advice对象，生成Advisor对象，扔进ProxyFactory中，进而产生对应的代理对象，具体怎么解析这些注解就是**@EnableAspectJAutoProxy注解**所要做的事情</p>
+<h4 id="对Spring-AOP的理解"><a href="#对Spring-AOP的理解" class="headerlink" title="对Spring AOP的理解"></a>对Spring AOP的理解</h4><p>OOP表示面向对象编程，是一种编程思想，AOP表示面向切面编程，也是一种编程思想，而我们上面所描述的就是Spring为了让程序员更加方便的做到面向切面编程所提供的技术支持，换句话说，就是Spring提供了一套机制，可以让我们更加容易的来进行AOP，所以这套机制我们也可以称之为Spring AOP。但是值得注意的是，上面所提供的注解的方式来定义Pointcut和Advice，Spring并不是首创，首创是AspectJ，而且也不仅仅只有Spring提供了一套机制来支持AOP，还有比如 JBoss 4.0、aspectwerkz等技术都提供了对于AOP的支持。而刚刚说的注解的方式，Spring是依赖了AspectJ的，或者说，Spring是直接把AspectJ中所定义的那些注解直接拿过来用，自己没有再重复定义了，不过也仅仅只是把注解的定义赋值过来了，每个注解具体底层是怎么解析的，还是Spring自己做的，所以我们在用Spring时，如果你想用@Before、@Around等注解，是需要单独引入aspecj相关jar包的AspectJ是在编译时对字节码进行了修改，是直接在UserService类对应的字节码中进行增强的，也就是可以理解为是在编译时就会去解析@Before这些注解，然后得到代理逻辑，加入到被代理的类中的字节码中去的，所以如果想用AspectJ技术来生成代理对象 ，是需要用单独的AspectJ编译器的。我们在项目中很少这么用，我们仅仅只是用了@Before这些注解，而我们在启动Spring的过程中，Spring会去解析这些注解，然后利用动态代理机制生成代理对象的。</p>
+<h4 id="AOP中的概念"><a href="#AOP中的概念" class="headerlink" title="AOP中的概念"></a>AOP中的概念</h4><p>上面我们已经提到Advisor、Advice、PointCut等概念了，还有一些其他的概念，首先关于AOP中的概念本身是比较难理解的，Spring官网上是这么说的：Let us begin by defining some central AOP concepts and terminology. These terms are not Spring-specific. Unfortunately, AOP terminology is not particularly intuitive. However, it would be even more confusing if Spring used its own terminology,意思是，AOP中的这些概念不是Spring特有的，不幸的是，AOP中的概念不是特别直观的，但是，如果Spring重新定义自己的那可能会导致更加混乱</p>
 <ol>
-<li><p>构造一个BeanFactory对象</p>
-</li>
-<li><p>解析配置类，得到BeanDefinition，并注册到BeanFactory中</p>
-</li>
-<li><ol>
-<li>解析@ComponentScan，此时就会完成扫描</li>
-<li>解析@Import</li>
-<li>解析@Bean</li>
-<li>…</li>
+<li>Aspect：表示切面，比如被@Aspect注解的类就是切面，可以在切面中去定义Pointcut、Advice等等</li>
+<li>Join point：表示连接点，表示一个程序在执行过程中的一个点，比如一个方法的执行，比如一个异常的处理，在Spring AOP中，一个连接点通常表示一个方法的执行。</li>
+<li>Advice：表示通知，表示在一个特定连接点上所采取的动作。Advice分为不同的类型，后面详细讨论，在很多AOP框架中，包括Spring，会用Interceptor拦截器来实现Advice，并且在连接点周围维护一个Interceptor链</li>
+<li>Pointcut：表示切点，用来匹配一个或多个连接点，Advice与切点表达式是关联在一起的，Advice将会执行在和切点表达式所匹配的连接点上</li>
+<li>Introduction：可以使用@DeclareParents来给所匹配的类添加一个接口，并指定一个默认实现</li>
+<li>Target object：目标对象，被代理对象</li>
+<li>AOP proxy：表示代理工厂，用来创建代理对象的，在Spring Framework中，要么是JDK动态代理，要么是CGLIB代理</li>
+<li>Weaving：表示织入，表示创建代理对象的动作，这个动作可以发生在编译时期（比如Aspejctj），或者运行时，比如Spring AOP</li>
 </ol>
-</li>
-<li><p>因为ApplicationContext还支持国际化，所以还需要初始化MessageSource对象</p>
-</li>
-<li><p>因为ApplicationContext还支持事件机制，所以还需要初始化ApplicationEventMulticaster对象</p>
-</li>
-<li><p>把用户定义的ApplicationListener对象添加到ApplicationContext中，等Spring启动完了就要发布事件了</p>
-</li>
-<li><p>创建<strong>非懒加载的单例</strong>Bean对象，并存在BeanFactory的单例池中。</p>
-</li>
-<li><p>调用Lifecycle Bean的start()方法</p>
-</li>
-<li><p>发布<strong>ContextRefreshedEvent</strong>事件</p>
-</li>
-<li><p>由于Spring启动过程中要创建非懒加载的单例Bean对象，那么就需要用到BeanPostProcessor，所以Spring在启动过程中就需要做两件事：</p>
+<h4 id="Advice在Spring-AOP中对应API"><a href="#Advice在Spring-AOP中对应API" class="headerlink" title="Advice在Spring AOP中对应API"></a>Advice在Spring AOP中对应API</h4><p>上面说到的Aspject中的注解，其中有五个是用来定义Advice的，表示代理逻辑，以及执行时机：</p>
 <ol>
-<li><p>生成默认的BeanPostProcessor对象，并添加到BeanFactory中</p>
-</li>
-<li><ol>
-<li>AutowiredAnnotationBeanPostProcessor：处理@Autowired、@Value</li>
-<li>CommonAnnotationBeanPostProcessor：处理@Resource、@PostConstruct、@PreDestroy</li>
-<li>ApplicationContextAwareProcessor：处理ApplicationContextAware等回调</li>
+<li>@Before</li>
+<li>@AfterReturning</li>
+<li>@AfterThrowing</li>
+<li>@After</li>
+<li>@Around</li>
 </ol>
-</li>
-<li><p>找到外部用户所定义的BeanPostProcessor对象（类型为BeanPostProcessor的Bean对象），并添加到BeanFactory中</p>
-</li>
-</ol>
-</li>
-</ol>
-<h4 id="BeanFactoryPostProcessor"><a href="#BeanFactoryPostProcessor" class="headerlink" title="BeanFactoryPostProcessor"></a>BeanFactoryPostProcessor</h4><p>BeanPostProcessor表示Bean的后置处理器，是用来对Bean进行加工的，类似的，BeanFactoryPostProcessor理解为BeanFactory的后置处理器，用来用对BeanFactory进行加工的。</p>
-<p>Spring支持用户定义BeanFactoryPostProcessor的实现类Bean，来对BeanFactory进行加工</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class SpringSourceFactoryPostProcessor implements BeanFactoryPostProcessor &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException &#123;</span><br><span class="line">		BeanDefinition beanDefinition &#x3D; beanFactory.getBeanDefinition(&quot;userService&quot;);</span><br><span class="line">		beanDefinition.setAutowireCandidate(false);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上代码，就利用了BeanFactoryPostProcessor来拿到BeanFactory，然后获取BeanFactory内的某个BeanDefinition对象并进行修改，这一步是发生在Spring启动时，创建单例Bean之前的，所以此时对BeanDefinition就行修改是会生效的</p>
-<p>AnnotationConfigApplicationContext继承的是GenericApplicationContext，所以它是不能刷新的。</p>
-<p>AnnotationConfigWebApplicationContext继承的是AbstractRefreshableWebApplicationContext，所以它是可以刷的。</p>
-<p>上面说的<strong>不能刷新是指不能重复刷新，只能调用一次refresh方法，第二次时会报错。</strong></p>
-<p>refresh（AnnotationConfigApplicationContext）流程</p>
+<p>我们前面也提到过，Spring自己也提供了类似的执行实际的实现类：</p>
 <ol>
-<li><p>在调用AnnotationConfigApplicationContext的构造方法之前，会调用父类GenericApplicationContext的无参构造方法，会构造一个BeanFactory，为<strong>DefaultListableBeanFactory</strong>。</p>
-</li>
-<li><p>构造AnnotatedBeanDefinitionReader（<strong>主要作用添加一些基础的PostProcessor，同时可以通过reader进行BeanDefinition的注册</strong>），同时对BeanFactory进行设置和添加<strong>PostProcessor</strong>（后置处理器）</p>
-</li>
-<li><ol>
-<li>设置dependencyComparator：AnnotationAwareOrderComparator，它是一个Comparator，是用来进行排序的，会获取某个对象上的<strong>Order注解</strong>或者通过实现<strong>Ordered接口</strong>所定义的值进行排序，在日常开发中可以利用这个类来进行排序。</li>
-<li>设置autowireCandidateResolver：ContextAnnotationAutowireCandidateResolver，用来解析某个Bean能不能进行自动注入，比如某个Bean的autowireCandidate属性是否等于true</li>
-<li>向BeanFactory中添加<strong>ConfigurationClassPostProcessor</strong>对应的BeanDefinition，它是一个BeanDefinitionRegistryPostProcessor，并且实现了PriorityOrdered接口</li>
-<li>向BeanFactory中添加<strong>AutowiredAnnotationBeanPostProcessor</strong>对应的BeanDefinition，它是一个InstantiationAwareBeanPostProcessorAdapter，MergedBeanDefinitionPostProcessor</li>
-<li>向BeanFactory中添加CommonAnnotationBeanPostProcessor对应的BeanDefinition，它是一个InstantiationAwareBeanPostProcessor，InitDestroyAnnotationBeanPostProcessor</li>
-<li>向BeanFactory中添加EventListenerMethodProcessor对应的BeanDefinition，它是一个BeanFactoryPostProcessor，SmartInitializingSingleton</li>
-<li>向BeanFactory中添加DefaultEventListenerFactory对应的BeanDefinition，它是一个EventListenerFactory</li>
+<li>接口MethodBeforeAdvice，继承了接口BeforeAdvice</li>
+<li>接口AfterReturningAdvice</li>
+<li>接口ThrowsAdvice</li>
+<li>接口AfterAdvice</li>
+<li>接口MethodInterceptor</li>
 </ol>
-</li>
-<li><p>构造ClassPathBeanDefinitionScanner（<strong>主要作用可以用来扫描得到并注册BeanDefinition</strong>），同时进行设置：</p>
-</li>
-<li><ol>
-<li>设置<strong>this.includeFilters = AnnotationTypeFilter(**</strong>Component**<strong>.class)</strong></li>
-<li>设置environment</li>
-<li>设置resourceLoader</li>
+<p>Spring会把五个注解解析为对应的Advice类：</p>
+<ol>
+<li>@Before：AspectJMethodBeforeAdvice，实际上就是一个MethodBeforeAdvice</li>
+<li>@AfterReturning：AspectJAfterReturningAdvice，实际上就是一个AfterReturningAdvice</li>
+<li>@AfterThrowing：AspectJAfterThrowingAdvice，实际上就是一个MethodInterceptor</li>
+<li>@After：AspectJAfterAdvice，实际上就是一个MethodInterceptor</li>
+<li>@Around：AspectJAroundAdvice，实际上就是一个MethodInterceptor</li>
 </ol>
-</li>
-<li><p>利用reader注册AppConfig为BeanDefinition，类型为AnnotatedGenericBeanDefinition</p>
-</li>
-<li><p><strong>接下来就是调用refresh方法</strong></p>
-</li>
-<li><p>prepareRefresh()：</p>
-</li>
-<li><ol>
-<li>记录启动时间</li>
-<li>可以允许子容器设置一些内容到Environment中</li>
-<li>验证Environment中是否包括了必须要有的属性</li>
-</ol>
-</li>
-<li><p>obtainFreshBeanFactory()：进行BeanFactory的refresh，在这里会去调用子类的refreshBeanFactory方法，具体子类是怎么刷新的得看子类，然后再调用子类的getBeanFactory方法，重新得到一个BeanFactory</p>
-</li>
-<li><p>prepareBeanFactory(beanFactory)：</p>
-</li>
-<li><ol>
-<li>设置beanFactory的类加载器</li>
-<li>设置表达式解析器：StandardBeanExpressionResolver，用来解析Spring中的表达式</li>
-<li>添加PropertyEditorRegistrar：ResourceEditorRegistrar，PropertyEditor类型转化器注册器，用来注册一些默认的PropertyEditor</li>
-<li>添加一个Bean的后置处理器：ApplicationContextAwareProcessor，是一个BeanPostProcessor，用来执行EnvironmentAware、ApplicationEventPublisherAware等回调方法</li>
-<li>添加<strong>ignoredDependencyInterface</strong>：可以向这个属性中添加一些接口，如果某个类实现了这个接口，并且这个类中的某些set方法在接口中也存在，那么这个set方法在自动注入的时候是不会执行的，比如EnvironmentAware这个接口，如果某个类实现了这个接口，那么就必须实现它的setEnvironment方法，而这是一个set方法，和Spring中的autowire是冲突的，那么Spring在自动注入时是不会调用setEnvironment方法的，而是等到回调Aware接口时再来调用（注意，这个功能仅限于xml的autowire，@Autowired注解是忽略这个属性的）</li>
-</ol>
-</li>
-<li><ol>
-<li><ol>
-<li>EnvironmentAware</li>
-<li>EmbeddedValueResolverAware</li>
-<li>ResourceLoaderAware</li>
-<li>ApplicationEventPublisherAware</li>
-<li>MessageSourceAware</li>
-<li>ApplicationContextAware</li>
-<li>另外其实在构造BeanFactory的时候就已经提前添加了另外三个：</li>
-<li>BeanNameAware</li>
-<li>BeanClassLoaderAware</li>
-<li>BeanFactoryAware</li>
-</ol>
-</li>
-</ol>
-</li>
-<li><ol>
-<li>添加<strong>resolvableDependencies</strong>：在byType进行依赖注入时，会先从这个属性中根据类型找bean</li>
-</ol>
-</li>
-<li><ol>
-<li><ol>
-<li>BeanFactory.class：当前BeanFactory对象</li>
-<li>ResourceLoader.class：当前ApplicationContext对象</li>
-<li>ApplicationEventPublisher.class：当前ApplicationContext对象</li>
-<li>ApplicationContext.class：当前ApplicationContext对象</li>
-</ol>
-</li>
-</ol>
-</li>
-<li><ol>
-<li>添加一个Bean的后置处理器：ApplicationListenerDetector，是一个BeanPostProcessor，用来判断某个Bean是不是ApplicationListener，如果是则把这个Bean添加到ApplicationContext中去，注意一个ApplicationListener只能是单例的</li>
-<li>添加一个Bean的后置处理器：LoadTimeWeaverAwareProcessor，是一个BeanPostProcessor，用来判断某个Bean是不是实现了LoadTimeWeaverAware接口，如果实现了则把ApplicationContext中的loadTimeWeaver回调setLoadTimeWeaver方法设置给该Bean。</li>
-<li>添加一些单例bean到单例池：</li>
-</ol>
-</li>
-<li><ol>
-<li><ol>
-<li>“environment”：Environment对象</li>
-<li>“systemProperties”：System.getProperties()返回的Map对象</li>
-<li>“systemEnvironment”：System.getenv()返回的Map对象</li>
-</ol>
-</li>
-</ol>
-</li>
-<li><p>postProcessBeanFactory(beanFactory) ： 提供给AbstractApplicationContext的子类进行扩展，具体的子类，可以继续向BeanFactory中再添加一些东西</p>
-</li>
-<li><p>invokeBeanFactoryPostProcessors(beanFactory)：<strong>执行BeanFactoryPostProcessor</strong></p>
-</li>
-<li><ol>
-<li>此时在BeanFactory中会存在一个BeanFactoryPostProcessor：<strong>ConfigurationClassPostProcessor</strong>，它也是一个<strong>BeanDefinitionRegistryPostProcessor</strong></li>
-<li><strong>第一阶段</strong></li>
-<li>从BeanFactory中找到类型为BeanDefinitionRegistryPostProcessor的beanName，也就是<strong>ConfigurationClassPostProcessor</strong>， 然后调用BeanFactory的getBean方法得到实例对象</li>
-<li>执行<strong>ConfigurationClassPostProcessor的**</strong>postProcessBeanDefinitionRegistry()**方法:</li>
-</ol>
-</li>
-<li><ol>
-<li><ol>
-<li>解析AppConfig类</li>
-<li>扫描得到BeanDefinition并注册</li>
-<li>解析@Import，@Bean等注解得到BeanDefinition并注册</li>
-<li>详细的看另外的笔记，专门分析了<strong>ConfigurationClassPostProcessor是如何工作的</strong></li>
-<li>在这里，我们只需要知道在这一步会去得到BeanDefinition，而这些BeanDefinition中可能存在BeanFactoryPostProcessor和BeanDefinitionRegistryPostProcessor，所以执行完ConfigurationClassPostProcessor的postProcessBeanDefinitionRegistry()方法后，还需要继续执行其他BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
-</ol>
-</li>
-</ol>
-</li>
-<li><ol>
-<li>执行其他BeanDefinitionRegistryPostProcessor的**postProcessBeanDefinitionRegistry()**方法</li>
-<li>执行所有BeanDefinitionRegistryPostProcessor的**postProcessBeanFactory()**方法</li>
-<li><strong>第二阶段</strong></li>
-<li>从BeanFactory中找到类型为BeanFactoryPostProcessor的beanName，而这些BeanFactoryPostProcessor包括了上面的BeanDefinitionRegistryPostProcessor</li>
-<li>执行还没有执行过的BeanFactoryPostProcessor的**postProcessBeanFactory()**方法</li>
-</ol>
-</li>
-<li><p>到此，所有的BeanFactoryPostProcessor的逻辑都执行完了，主要做的事情就是得到BeanDefinition并注册到BeanFactory中</p>
-</li>
-<li><p>registerBeanPostProcessors(beanFactory)：因为上面的步骤完成了扫描，这个过程中程序员可能自己定义了一些BeanPostProcessor，在这一步就会把BeanFactory中所有的BeanPostProcessor找出来并实例化得到一个对象，并添加到BeanFactory中去（属性<strong>beanPostProcessors</strong>），最后再重新添加一个ApplicationListenerDetector对象（之前其实就添加了过，这里是为了把ApplicationListenerDetector移动到最后）</p>
-</li>
-<li><p>initMessageSource()：如果BeanFactory中存在一个叫做”<strong>messageSource</strong>“的BeanDefinition，那么就会把这个Bean对象创建出来并赋值给ApplicationContext的messageSource属性，让ApplicationContext拥有<strong>国际化</strong>的功能</p>
-</li>
-<li><p>initApplicationEventMulticaster()：如果BeanFactory中存在一个叫做”<strong>applicationEventMulticaster</strong>“的BeanDefinition，那么就会把这个Bean对象创建出来并赋值给ApplicationContext的applicationEventMulticaster属性，让ApplicationContext拥有<strong>事件发布</strong>的功能</p>
-</li>
-<li><p>onRefresh()：提供给AbstractApplicationContext的子类进行扩展，没用</p>
-</li>
-<li><p>registerListeners()：从BeanFactory中获取ApplicationListener类型的beanName，然后添加到ApplicationContext中的事件广播器<strong>applicationEventMulticaster</strong>中去，到这一步因为FactoryBean还没有调用getObject()方法生成Bean对象，所以这里要在根据类型找一下ApplicationListener，记录一下对应的beanName</p>
-</li>
-<li><p>finishBeanFactoryInitialization(beanFactory)：完成BeanFactory的初始化，主要就是<strong>实例化非懒加载的单例Bean</strong>，单独的笔记去讲。</p>
-</li>
-<li><p>finishRefresh()：BeanFactory的初始化完后，就到了Spring启动的最后一步了</p>
-</li>
-<li><ol>
-<li>设置ApplicationContext的lifecycleProcessor，默认情况下设置的是DefaultLifecycleProcessor</li>
-<li>调用lifecycleProcessor的onRefresh()方法，如果是DefaultLifecycleProcessor，那么会获取所有类型为Lifecycle的Bean对象，然后调用它的start()方法，这就是ApplicationContext的生命周期扩展机制</li>
-<li>发布<strong>ContextRefreshedEvent</strong>事件</li>
-</ol>
-</li>
-</ol>
-<h4 id="执行BeanFactoryPostProcessor"><a href="#执行BeanFactoryPostProcessor" class="headerlink" title="执行BeanFactoryPostProcessor"></a>执行BeanFactoryPostProcessor</h4><ol>
-<li>执行通过ApplicationContext添加进来的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
-<li>执行BeanFactory中实现了PriorityOrdered接口的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
-<li>执行BeanFactory中实现了Ordered接口的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
-<li>执行BeanFactory中其他的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
-<li>执行上面所有的BeanDefinitionRegistryPostProcessor的postProcessBeanFactory()方法</li>
-<li>执行通过ApplicationContext添加进来的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
-<li>执行BeanFactory中实现了PriorityOrdered接口的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
-<li>执行BeanFactory中实现了Ordered接口的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
-<li>执行BeanFactory中其他的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
-</ol>
-<p>Lifecycle表示的是ApplicationContext的生命周期，可以定义一个SmartLifecycle来监听ApplicationContext的启动和关闭：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceLifecycle</span> <span class="keyword">implements</span> <span class="title">SmartLifecycle</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span> isRunning = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;启动&quot;</span>);</span><br><span class="line">		isRunning = <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 要触发stop()，要调用context.close()，或者注册关闭钩子（context.registerShutdownHook();）</span></span><br><span class="line">		System.out.println(<span class="string">&quot;停止&quot;</span>);</span><br><span class="line">		isRunning = <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isRunning</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> isRunning;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
 
@@ -446,7 +341,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/10/07/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2021/06/08/springAOP/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -460,18 +355,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2022/10/07/springAOP/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/11/17/think_in_java_Integer/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          (no title)
+          java 包装类
         
       </div>
     </a>
   
   
-    <a href="/2022/10/07/spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title"></div>
+    <a href="/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">spring启动过程分析</div>
       <i class="icon-circle-right"></i>
     </a>
   

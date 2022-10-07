@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives: 2022 | like winter</title>
+  <title>spring启动过程分析 | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/2022/index.html">
+  <meta name="description" content="通常，我们说的Spring启动，就是构造ApplicationContext对象以及调用refresh()方法的过程。 主要做几件事：  构造一个BeanFactory对象  解析配置类，得到BeanDefinition，并注册到BeanFactory中   解析@ComponentScan，此时就会完成扫描 解析@Import 解析@Bean …   因为ApplicationContext还支">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring启动过程分析">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="通常，我们说的Spring启动，就是构造ApplicationContext对象以及调用refresh()方法的过程。 主要做几件事：  构造一个BeanFactory对象  解析配置类，得到BeanDefinition，并注册到BeanFactory中   解析@ComponentScan，此时就会完成扫描 解析@Import 解析@Bean …   因为ApplicationContext还支">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-02T12:40:07.000Z">
+<meta property="article:modified_time" content="2022-10-07T08:29:52.778Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,49 +154,371 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-spring启动过程分析" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2022" class="archive-year">2022</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/05/01/spring_newObj/" class="archive-article-date">
-  	<time datetime="2022-05-01T07:21:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-01</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/05/01/spring_newObj/">spring_newObj</a>
+    <h1 class="article-title" itemprop="name">
+      spring启动过程分析
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+        
+        <a href="/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" class="archive-article-date">
+  	<time datetime="2021-06-02T12:40:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通常，我们说的Spring启动，就是构造ApplicationContext对象以及调用refresh()方法的过程。</p>
+<p>主要做几件事：</p>
+<ol>
+<li><p>构造一个BeanFactory对象</p>
+</li>
+<li><p>解析配置类，得到BeanDefinition，并注册到BeanFactory中</p>
+</li>
+<li><ol>
+<li>解析@ComponentScan，此时就会完成扫描</li>
+<li>解析@Import</li>
+<li>解析@Bean</li>
+<li>…</li>
+</ol>
+</li>
+<li><p>因为ApplicationContext还支持国际化，所以还需要初始化MessageSource对象</p>
+</li>
+<li><p>因为ApplicationContext还支持事件机制，所以还需要初始化ApplicationEventMulticaster对象</p>
+</li>
+<li><p>把用户定义的ApplicationListener对象添加到ApplicationContext中，等Spring启动完了就要发布事件了</p>
+</li>
+<li><p>创建<strong>非懒加载的单例</strong>Bean对象，并存在BeanFactory的单例池中。</p>
+</li>
+<li><p>调用Lifecycle Bean的start()方法</p>
+</li>
+<li><p>发布<strong>ContextRefreshedEvent</strong>事件</p>
+</li>
+<li><p>由于Spring启动过程中要创建非懒加载的单例Bean对象，那么就需要用到BeanPostProcessor，所以Spring在启动过程中就需要做两件事：</p>
+<ol>
+<li><p>生成默认的BeanPostProcessor对象，并添加到BeanFactory中</p>
+</li>
+<li><ol>
+<li>AutowiredAnnotationBeanPostProcessor：处理@Autowired、@Value</li>
+<li>CommonAnnotationBeanPostProcessor：处理@Resource、@PostConstruct、@PreDestroy</li>
+<li>ApplicationContextAwareProcessor：处理ApplicationContextAware等回调</li>
+</ol>
+</li>
+<li><p>找到外部用户所定义的BeanPostProcessor对象（类型为BeanPostProcessor的Bean对象），并添加到BeanFactory中</p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="BeanFactoryPostProcessor"><a href="#BeanFactoryPostProcessor" class="headerlink" title="BeanFactoryPostProcessor"></a>BeanFactoryPostProcessor</h4><p>BeanPostProcessor表示Bean的后置处理器，是用来对Bean进行加工的，类似的，BeanFactoryPostProcessor理解为BeanFactory的后置处理器，用来用对BeanFactory进行加工的。</p>
+<p>Spring支持用户定义BeanFactoryPostProcessor的实现类Bean，来对BeanFactory进行加工</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class SpringSourceFactoryPostProcessor implements BeanFactoryPostProcessor &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException &#123;</span><br><span class="line">		BeanDefinition beanDefinition &#x3D; beanFactory.getBeanDefinition(&quot;userService&quot;);</span><br><span class="line">		beanDefinition.setAutowireCandidate(false);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码，就利用了BeanFactoryPostProcessor来拿到BeanFactory，然后获取BeanFactory内的某个BeanDefinition对象并进行修改，这一步是发生在Spring启动时，创建单例Bean之前的，所以此时对BeanDefinition就行修改是会生效的</p>
+<p>AnnotationConfigApplicationContext继承的是GenericApplicationContext，所以它是不能刷新的。</p>
+<p>AnnotationConfigWebApplicationContext继承的是AbstractRefreshableWebApplicationContext，所以它是可以刷的。</p>
+<p>上面说的<strong>不能刷新是指不能重复刷新，只能调用一次refresh方法，第二次时会报错。</strong></p>
+<p>refresh（AnnotationConfigApplicationContext）流程</p>
+<ol>
+<li><p>在调用AnnotationConfigApplicationContext的构造方法之前，会调用父类GenericApplicationContext的无参构造方法，会构造一个BeanFactory，为<strong>DefaultListableBeanFactory</strong>。</p>
+</li>
+<li><p>构造AnnotatedBeanDefinitionReader（<strong>主要作用添加一些基础的PostProcessor，同时可以通过reader进行BeanDefinition的注册</strong>），同时对BeanFactory进行设置和添加<strong>PostProcessor</strong>（后置处理器）</p>
+</li>
+<li><ol>
+<li>设置dependencyComparator：AnnotationAwareOrderComparator，它是一个Comparator，是用来进行排序的，会获取某个对象上的<strong>Order注解</strong>或者通过实现<strong>Ordered接口</strong>所定义的值进行排序，在日常开发中可以利用这个类来进行排序。</li>
+<li>设置autowireCandidateResolver：ContextAnnotationAutowireCandidateResolver，用来解析某个Bean能不能进行自动注入，比如某个Bean的autowireCandidate属性是否等于true</li>
+<li>向BeanFactory中添加<strong>ConfigurationClassPostProcessor</strong>对应的BeanDefinition，它是一个BeanDefinitionRegistryPostProcessor，并且实现了PriorityOrdered接口</li>
+<li>向BeanFactory中添加<strong>AutowiredAnnotationBeanPostProcessor</strong>对应的BeanDefinition，它是一个InstantiationAwareBeanPostProcessorAdapter，MergedBeanDefinitionPostProcessor</li>
+<li>向BeanFactory中添加CommonAnnotationBeanPostProcessor对应的BeanDefinition，它是一个InstantiationAwareBeanPostProcessor，InitDestroyAnnotationBeanPostProcessor</li>
+<li>向BeanFactory中添加EventListenerMethodProcessor对应的BeanDefinition，它是一个BeanFactoryPostProcessor，SmartInitializingSingleton</li>
+<li>向BeanFactory中添加DefaultEventListenerFactory对应的BeanDefinition，它是一个EventListenerFactory</li>
+</ol>
+</li>
+<li><p>构造ClassPathBeanDefinitionScanner（<strong>主要作用可以用来扫描得到并注册BeanDefinition</strong>），同时进行设置：</p>
+</li>
+<li><ol>
+<li>设置<strong>this.includeFilters = AnnotationTypeFilter(**</strong>Component**<strong>.class)</strong></li>
+<li>设置environment</li>
+<li>设置resourceLoader</li>
+</ol>
+</li>
+<li><p>利用reader注册AppConfig为BeanDefinition，类型为AnnotatedGenericBeanDefinition</p>
+</li>
+<li><p><strong>接下来就是调用refresh方法</strong></p>
+</li>
+<li><p>prepareRefresh()：</p>
+</li>
+<li><ol>
+<li>记录启动时间</li>
+<li>可以允许子容器设置一些内容到Environment中</li>
+<li>验证Environment中是否包括了必须要有的属性</li>
+</ol>
+</li>
+<li><p>obtainFreshBeanFactory()：进行BeanFactory的refresh，在这里会去调用子类的refreshBeanFactory方法，具体子类是怎么刷新的得看子类，然后再调用子类的getBeanFactory方法，重新得到一个BeanFactory</p>
+</li>
+<li><p>prepareBeanFactory(beanFactory)：</p>
+</li>
+<li><ol>
+<li>设置beanFactory的类加载器</li>
+<li>设置表达式解析器：StandardBeanExpressionResolver，用来解析Spring中的表达式</li>
+<li>添加PropertyEditorRegistrar：ResourceEditorRegistrar，PropertyEditor类型转化器注册器，用来注册一些默认的PropertyEditor</li>
+<li>添加一个Bean的后置处理器：ApplicationContextAwareProcessor，是一个BeanPostProcessor，用来执行EnvironmentAware、ApplicationEventPublisherAware等回调方法</li>
+<li>添加<strong>ignoredDependencyInterface</strong>：可以向这个属性中添加一些接口，如果某个类实现了这个接口，并且这个类中的某些set方法在接口中也存在，那么这个set方法在自动注入的时候是不会执行的，比如EnvironmentAware这个接口，如果某个类实现了这个接口，那么就必须实现它的setEnvironment方法，而这是一个set方法，和Spring中的autowire是冲突的，那么Spring在自动注入时是不会调用setEnvironment方法的，而是等到回调Aware接口时再来调用（注意，这个功能仅限于xml的autowire，@Autowired注解是忽略这个属性的）</li>
+</ol>
+</li>
+<li><ol>
+<li><ol>
+<li>EnvironmentAware</li>
+<li>EmbeddedValueResolverAware</li>
+<li>ResourceLoaderAware</li>
+<li>ApplicationEventPublisherAware</li>
+<li>MessageSourceAware</li>
+<li>ApplicationContextAware</li>
+<li>另外其实在构造BeanFactory的时候就已经提前添加了另外三个：</li>
+<li>BeanNameAware</li>
+<li>BeanClassLoaderAware</li>
+<li>BeanFactoryAware</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>添加<strong>resolvableDependencies</strong>：在byType进行依赖注入时，会先从这个属性中根据类型找bean</li>
+</ol>
+</li>
+<li><ol>
+<li><ol>
+<li>BeanFactory.class：当前BeanFactory对象</li>
+<li>ResourceLoader.class：当前ApplicationContext对象</li>
+<li>ApplicationEventPublisher.class：当前ApplicationContext对象</li>
+<li>ApplicationContext.class：当前ApplicationContext对象</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>添加一个Bean的后置处理器：ApplicationListenerDetector，是一个BeanPostProcessor，用来判断某个Bean是不是ApplicationListener，如果是则把这个Bean添加到ApplicationContext中去，注意一个ApplicationListener只能是单例的</li>
+<li>添加一个Bean的后置处理器：LoadTimeWeaverAwareProcessor，是一个BeanPostProcessor，用来判断某个Bean是不是实现了LoadTimeWeaverAware接口，如果实现了则把ApplicationContext中的loadTimeWeaver回调setLoadTimeWeaver方法设置给该Bean。</li>
+<li>添加一些单例bean到单例池：</li>
+</ol>
+</li>
+<li><ol>
+<li><ol>
+<li>“environment”：Environment对象</li>
+<li>“systemProperties”：System.getProperties()返回的Map对象</li>
+<li>“systemEnvironment”：System.getenv()返回的Map对象</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>postProcessBeanFactory(beanFactory) ： 提供给AbstractApplicationContext的子类进行扩展，具体的子类，可以继续向BeanFactory中再添加一些东西</p>
+</li>
+<li><p>invokeBeanFactoryPostProcessors(beanFactory)：<strong>执行BeanFactoryPostProcessor</strong></p>
+</li>
+<li><ol>
+<li>此时在BeanFactory中会存在一个BeanFactoryPostProcessor：<strong>ConfigurationClassPostProcessor</strong>，它也是一个<strong>BeanDefinitionRegistryPostProcessor</strong></li>
+<li><strong>第一阶段</strong></li>
+<li>从BeanFactory中找到类型为BeanDefinitionRegistryPostProcessor的beanName，也就是<strong>ConfigurationClassPostProcessor</strong>， 然后调用BeanFactory的getBean方法得到实例对象</li>
+<li>执行<strong>ConfigurationClassPostProcessor的**</strong>postProcessBeanDefinitionRegistry()**方法:</li>
+</ol>
+</li>
+<li><ol>
+<li><ol>
+<li>解析AppConfig类</li>
+<li>扫描得到BeanDefinition并注册</li>
+<li>解析@Import，@Bean等注解得到BeanDefinition并注册</li>
+<li>详细的看另外的笔记，专门分析了<strong>ConfigurationClassPostProcessor是如何工作的</strong></li>
+<li>在这里，我们只需要知道在这一步会去得到BeanDefinition，而这些BeanDefinition中可能存在BeanFactoryPostProcessor和BeanDefinitionRegistryPostProcessor，所以执行完ConfigurationClassPostProcessor的postProcessBeanDefinitionRegistry()方法后，还需要继续执行其他BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><ol>
+<li>执行其他BeanDefinitionRegistryPostProcessor的**postProcessBeanDefinitionRegistry()**方法</li>
+<li>执行所有BeanDefinitionRegistryPostProcessor的**postProcessBeanFactory()**方法</li>
+<li><strong>第二阶段</strong></li>
+<li>从BeanFactory中找到类型为BeanFactoryPostProcessor的beanName，而这些BeanFactoryPostProcessor包括了上面的BeanDefinitionRegistryPostProcessor</li>
+<li>执行还没有执行过的BeanFactoryPostProcessor的**postProcessBeanFactory()**方法</li>
+</ol>
+</li>
+<li><p>到此，所有的BeanFactoryPostProcessor的逻辑都执行完了，主要做的事情就是得到BeanDefinition并注册到BeanFactory中</p>
+</li>
+<li><p>registerBeanPostProcessors(beanFactory)：因为上面的步骤完成了扫描，这个过程中程序员可能自己定义了一些BeanPostProcessor，在这一步就会把BeanFactory中所有的BeanPostProcessor找出来并实例化得到一个对象，并添加到BeanFactory中去（属性<strong>beanPostProcessors</strong>），最后再重新添加一个ApplicationListenerDetector对象（之前其实就添加了过，这里是为了把ApplicationListenerDetector移动到最后）</p>
+</li>
+<li><p>initMessageSource()：如果BeanFactory中存在一个叫做”<strong>messageSource</strong>“的BeanDefinition，那么就会把这个Bean对象创建出来并赋值给ApplicationContext的messageSource属性，让ApplicationContext拥有<strong>国际化</strong>的功能</p>
+</li>
+<li><p>initApplicationEventMulticaster()：如果BeanFactory中存在一个叫做”<strong>applicationEventMulticaster</strong>“的BeanDefinition，那么就会把这个Bean对象创建出来并赋值给ApplicationContext的applicationEventMulticaster属性，让ApplicationContext拥有<strong>事件发布</strong>的功能</p>
+</li>
+<li><p>onRefresh()：提供给AbstractApplicationContext的子类进行扩展，没用</p>
+</li>
+<li><p>registerListeners()：从BeanFactory中获取ApplicationListener类型的beanName，然后添加到ApplicationContext中的事件广播器<strong>applicationEventMulticaster</strong>中去，到这一步因为FactoryBean还没有调用getObject()方法生成Bean对象，所以这里要在根据类型找一下ApplicationListener，记录一下对应的beanName</p>
+</li>
+<li><p>finishBeanFactoryInitialization(beanFactory)：完成BeanFactory的初始化，主要就是<strong>实例化非懒加载的单例Bean</strong>，单独的笔记去讲。</p>
+</li>
+<li><p>finishRefresh()：BeanFactory的初始化完后，就到了Spring启动的最后一步了</p>
+</li>
+<li><ol>
+<li>设置ApplicationContext的lifecycleProcessor，默认情况下设置的是DefaultLifecycleProcessor</li>
+<li>调用lifecycleProcessor的onRefresh()方法，如果是DefaultLifecycleProcessor，那么会获取所有类型为Lifecycle的Bean对象，然后调用它的start()方法，这就是ApplicationContext的生命周期扩展机制</li>
+<li>发布<strong>ContextRefreshedEvent</strong>事件</li>
+</ol>
+</li>
+</ol>
+<h4 id="执行BeanFactoryPostProcessor"><a href="#执行BeanFactoryPostProcessor" class="headerlink" title="执行BeanFactoryPostProcessor"></a>执行BeanFactoryPostProcessor</h4><ol>
+<li>执行通过ApplicationContext添加进来的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
+<li>执行BeanFactory中实现了PriorityOrdered接口的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
+<li>执行BeanFactory中实现了Ordered接口的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
+<li>执行BeanFactory中其他的BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry()方法</li>
+<li>执行上面所有的BeanDefinitionRegistryPostProcessor的postProcessBeanFactory()方法</li>
+<li>执行通过ApplicationContext添加进来的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
+<li>执行BeanFactory中实现了PriorityOrdered接口的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
+<li>执行BeanFactory中实现了Ordered接口的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
+<li>执行BeanFactory中其他的BeanFactoryPostProcessor的postProcessBeanFactory()方法</li>
+</ol>
+<p>Lifecycle表示的是ApplicationContext的生命周期，可以定义一个SmartLifecycle来监听ApplicationContext的启动和关闭：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringSourceLifecycle</span> <span class="keyword">implements</span> <span class="title">SmartLifecycle</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span> isRunning = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;启动&quot;</span>);</span><br><span class="line">		isRunning = <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 要触发stop()，要调用context.close()，或者注册关闭钩子（context.registerShutdownHook();）</span></span><br><span class="line">		System.out.println(<span class="string">&quot;停止&quot;</span>);</span><br><span class="line">		isRunning = <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isRunning</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> isRunning;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2021/06/08/springAOP/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          springAOP
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2021/05/23/spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">spring循环依赖</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -215,8 +541,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
