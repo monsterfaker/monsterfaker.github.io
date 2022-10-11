@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives | like winter</title>
+  <title>jvm学习 | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/page/2/index.html">
+  <meta name="description" content="指令-&gt;解释器-&gt;机器码-&gt;CPU执行 JMM程序计数器（物理上通过寄存器（CPU最快）实现）：存储的是下一条JVM指令的地址特点：  线程私有 没有内存溢出  虚拟机栈设置大小：-Xxs -Xss  默认1024 1M，栈大小划分大了，会影响线程数的大小 线程运行时的内存空间，由栈帧（一次方法调用需要的内存）组成 栈帧  局部变量表：a,b存储在局部变量表中 操作数栈：执行操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm学习">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/05/01/jvm%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="指令-&gt;解释器-&gt;机器码-&gt;CPU执行 JMM程序计数器（物理上通过寄存器（CPU最快）实现）：存储的是下一条JVM指令的地址特点：  线程私有 没有内存溢出  虚拟机栈设置大小：-Xxs -Xss  默认1024 1M，栈大小划分大了，会影响线程数的大小 线程运行时的内存空间，由栈帧（一次方法调用需要的内存）组成 栈帧  局部变量表：a,b存储在局部变量表中 操作数栈：执行操作">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-05-01T02:43:50.000Z">
+<meta property="article:modified_time" content="2022-10-09T07:00:56.679Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,295 +154,306 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-jvm学习" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      jvm学习
+    </h1>
+  
+
+        
+        <a href="/2022/05/01/jvm%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2022-05-01T02:43:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-01</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>指令-&gt;解释器-&gt;机器码-&gt;CPU执行</p>
+<h5 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h5><h6 id="程序计数器（物理上通过寄存器（CPU最快）实现）：存储的是下一条JVM指令的地址"><a href="#程序计数器（物理上通过寄存器（CPU最快）实现）：存储的是下一条JVM指令的地址" class="headerlink" title="程序计数器（物理上通过寄存器（CPU最快）实现）：存储的是下一条JVM指令的地址"></a>程序计数器（物理上通过寄存器（CPU最快）实现）：存储的是下一条JVM指令的地址</h6><p>特点：</p>
+<ul>
+<li>线程私有</li>
+<li>没有内存溢出</li>
+</ul>
+<h6 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h6><p>设置大小：-Xxs -Xss </p>
+<p>默认1024 1M，栈大小划分大了，会影响线程数的大小</p>
+<p>线程运行时的内存空间，由栈帧（一次方法调用需要的内存）组成</p>
+<p><strong>栈帧</strong></p>
+<ul>
+<li>局部变量表：a,b存储在局部变量表中</li>
+<li>操作数栈：执行操作时，a，b都会存储在操作数栈，结果也是</li>
+<li>动态链接 :当使用函数时，会存储相关的函数应用</li>
+<li>方法出口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> TylerpxRao@gmail.com</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022-05-01 9:58</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        add(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> 	b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>栈的常见问题: </p>
+<p>​    线程安全问题：局部变量是否共享</p>
+<p>​    栈内存溢出：方法无限递归调用， 类循环引用场景（如json转换时）</p>
+<p>CPU飙高定位方法：</p>
+<p>top命令</p>
+<p>ps H -eo pid,tid,%cpu|grep 765651（PID） </p>
+<p>jstack pid : 十进制-&gt;十六进制 -&gt;可以看到对应行数</p>
+<h6 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h6><p>给本地方法提供运行空间：native方法，C、C++实现，</p>
+<h6 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h6><ol>
+<li>线程共享，需要考虑线程安全问题</li>
+<li>垃圾回收范围，不再引用的对象，会进行GC</li>
+</ol>
+<p>内存溢出OOM</p>
+<p>参数：-Xmx -Xms</p>
+<p>堆诊断：jps查看当前java进程</p>
+<p>​                jmap查看堆内存占用情况 某一时刻</p>
+<p>​                jconsle图形监控</p>
+<h6 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h6><p>jvm线程共享，存储了类的相关信息：方法、构造器等</p>
+<p>逻辑上是堆的一部分，并不强制方法区的位置</p>
+<p>1.8 元空间-操作系统的本地内存-&gt;</p>
+<p>元空间：</p>
+<p>​    class</p>
+<p>​    classLoader</p>
+<p>​    运行时常量池（常量池的信息，一张hash表，用于寻找类名、方法名等，当类被加载时会将这部分数据放到运行时常量池-&gt;符号引用变成真实地址）</p>
+<p>其他进程：</p>
+<p>也会OOM</p>
+<p>StringTab -xx:+PrintStringTabStatistics -xx:+PrintGcDetails</p>
+<h5 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h5><p>系统内存：用于NIO使用，用于缓存区内存byteBuffer alloct</p>
+<p>读写性能很高，回收成本高</p>
+<p>IO读写 。用户态-&gt;内核态</p>
+<p>​                磁盘内容-&gt;系统缓冲区-&gt;java缓冲区（jvm堆内存）</p>
+<p>使用dircetBuffer-&gt;减少了系统缓冲区往java缓冲区复制的操作</p>
+<p>源码通过unsafe用来分配.alloct、释放fremomory -&gt;虚引用，关联的对象被回收，触发虚引用中的对象回收</p>
+<h5 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h5><p>判断垃圾可以回收的算法</p>
+<p>1.引用计数法：没办法解决循环引用问题</p>
+<p>2.可达性分析算法：需要先找到根节点，从跟阶段一直往下找</p>
+<p>（MAT分析）什么节点能作为GCRoots:</p>
+<p>​    1.栈中引用的对象</p>
+<p>​    2.native方法中引用的对象</p>
+<p>​    3.方法区中静态属性/常量引用的对象</p>
+<p>强：平时创建的都是强引用，沿着GCROOT能找到，不会被回收；只有GCroot没有直接或者简介引用，才能被回收</p>
+<p>软：内存不够时，会被回收（前提是没有其他强引用依赖）</p>
+<p>弱：没有强引用直接应用，只要发生了垃圾回收，都会回收掉弱引用对象</p>
+<p>虚：创建一个引用队列 -&gt;byteBuff：虚引用：Cleaner-&gt;调用unsafe.freeMemory</p>
+<p>终结器引用：没有强引用时，加入引用队列 （只是先入队，finelize线程优先程度很小），调用Objcet对象 finilize方法 </p>
+<p>算法</p>
+<p>新生代：复制 内存区划分为大小两块相等的地区 每次把存活的对象从from 复制到to 中（空间换时间）</p>
+<p>老年代：标记清除、：先标记，后清除（记录地址，后续把这些内存分配出去） 垃圾回收速度快，容易产生碎片，大对象很难分配空间，内存溢出问题，容易造成fullgc</p>
+<p>​             标记整理：先标记，后整理 即可用内存移动指针整理，避免造成的碎片问题，整理涉及到对象移动，效率较低（对象的引用地址改变问题）时间代价大</p>
+<p>分带垃圾回收机制</p>
+<p>新生代：eden 8、  suvivor from 1、suvivor to 1</p>
+<p>老年代：长时间存活的对象</p>
+<p>新对象创建时 分配到eden 满了时 触发 mirrorGc -》可达性分析算法-》标记成功-》复制算法-》suvivor from （寿命+1 存储在对象头中）寿命超过15次，会被复制到老年代</p>
+<p>如果大对象无法分配，会被直接分配到老年代</p>
+<p>如果都满了，无法分配，触发FULL GC</p>
+<p>一些参数：堆：Xmx Xms  新生代 -Xmn （-XX：NewSize=xx+-XX:MaxNewSize=size）</p>
+<p>-XX:InitialSuvivorRatio=8 幸存区比例</p>
+<p>晋升年龄：-XX：MaxTenuringThreshold=15</p>
+<p>PrintGcDatails -verbos:gc 打印详情</p>
+<p>-XX:ScanvangeBeforeFullGC  FGC前进行MirrorGC</p>
+<h6 id="垃圾回收器种类"><a href="#垃圾回收器种类" class="headerlink" title="垃圾回收器种类"></a>垃圾回收器种类</h6><p>串行：单线程，堆内存较小，适合个人电脑</p>
+<p>Serial ：UserSerailGC =Serial（新生代，复制算法） +Serial old（老年代，标记整理算法）</p>
+<p>注意不是马上停止：到达安全点、安全区才会开始gc 避免线程状态改变</p>
+<p>吞吐量优先</p>
+<ul>
+<li><p>多线程</p>
+</li>
+<li><p>堆内存较大、多核CPU</p>
+</li>
+<li><p>单位时间内STW时间最短</p>
+</li>
+</ul>
+<p>-XX：+UseParallelGC  -XX：+UseParalleloldGC 开启一个即可 多线程回收 线程数=CPU核数 ParallelGCThreads=n 控制 -XX：GCTimeRtio=n  垃圾回收时间与总时间的占比 1/1+ratio 默认99</p>
+<p>主要的CMS：-XX：UseConcMarkSweepGc -XX:UseParNewGc ~并发失败serialOld</p>
+<p>CMS的工作流程   浮动垃圾预留，需要配置占比：CMSinitiatingOcuupancyFraction=60 </p>
+<p>初始标记（串行STW）-》并发标记（并行）-》重新标记（串行STW）少标问题（增量更新）=》并发处理（并行）</p>
+<p>-XX：MaxGcPauseMillis=ms 200ms G1</p>
+<p>响应时间优先</p>
+<p>   单次STW时间较短</p>
+<p>G1:garbage first  userG1GC :注重吞吐量 低时延，默认暂停时间200ms maxGCPauseMillis=200</p>
+<p>超大堆内存，默认将对内存分为多个相等的region G1heapRegionSize=1024 1m  维护了一个优先列表，供垃圾回收的时候使用</p>
+<p>整体是标记整理算法，区域之间用复制算法</p>
+<p>新生代收集、并发标记、混合回收 </p>
+<p>查看GC相关的命令：java -XX：+printFlagsFinal -version|grep “GC”</p>
+<p>类的加载过程</p>
+<p>加载：将class字节码文件加载到jvm方法区（元空间）中</p>
+<p>链接</p>
+<ul>
+<li>验证：验证对应的类文件是否合法，安全检查</li>
+<li>准备：为静态变量分配空间，赋默认值（<strong>赋值在初始化状态</strong>） 如果是final-准备阶段完成，final new 初始化完成</li>
+<li>解析：常量池中的符号引用解析为直接引用（内存位置）</li>
+</ul>
+<p>初始化：调用cinit</p>
+<p>触发初始化时机：1.main方法中所在的类</p>
+<p>2.首次访问类静态变量或方法</p>
+<p>3.子类初始化，父类未初始化 同静态变量</p>
+<p>4.class.forName</p>
+<p>5.new</p>
+<p>不会触发：</p>
+<p>static final时</p>
+<p>类.class</p>
+<p>创建类数组</p>
+<p>loadClass类加载</p>
+<p>class.forName参数2为false</p>
+<p>JMM：java内存模型 java memory model：JMM定义了一套在多线程读写共享数据时，对数据可见性、有序性、原子性的规则和保障</p>
+<p>JMM规定了所有的变量都存储在主内存（Main Memory）中。每个线程还有自己的工作内存（Working Memory）,线程的工作内存中保存了该线程使用到的变量的主内存的副本拷贝，线程对变量的所有操作（读取、赋值等）都必须在工作内存中进行，而不能直接读写主内存中的变量（volatile变量仍然有工作内存的拷贝，但是由于它特殊的操作顺序性规定，所以看起来如同直接在主内存中读写访问一般）。不同的线程之间也无法直接访问对方工作内存中的变量，线程之间值的传递都需要通过主内存来完成。<br>主要是设计到主存和本地内存数据刷新的机制</p>
+<p>原子性</p>
+<p>可见性</p>
+<p>一致性</p>
+<h4 id="volatile的原理和实现机制"><a href="#volatile的原理和实现机制" class="headerlink" title="volatile的原理和实现机制"></a>volatile的原理和实现机制</h4><p>观察加入volatile关键字和没有加入volatile关键字时所生成的汇编代码发现，加入volatile关键字时，会多出一个lock前缀指令”</p>
+<p>lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），内存屏障会提供3个功能：</p>
+<p>1）它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；</p>
+<p>2）它会强制将对缓存的修改操作立即写入主存；</p>
+<p>3）如果是写操作，它会导致其他CPU中对应的缓存行无效。</p>
+<p>synchronized关键字是防止多个线程同时执行一段代码，那么就会很影响程序执行效率，而volatile关键字在某些情况下性能要优于synchronized，但是要注意volatile关键字是无法替代synchronized关键字的，因为volatile关键字无法保证操作的原子性。通常来说，使用volatile必须具备以下2个条件：<br>　　1）对变量的写操作不依赖于当前值<br>　　2）该变量没有包含在具有其他变量的不变式中</p>
+<h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>1.无锁<br>无锁是指没有对资源进行锁定，所有的线程都能访问并修改同一个资源，但同时只有一个线程能修改成功。</p>
+<p>特点：修改操作会在循环内进行，线程会不断的尝试修改共享资源。如果没有冲突就修改成功并退出，否则就会继续循环尝试。如果有多个线程修改同一个值，必定会有一个线程能修改成功，而其他修改失败的线程会不断重试直到修改成功。</p>
+<p>2.偏向锁<br>偏向锁是指当一段同步代码一直被同一个线程所访问时，即不存在多个线程的竞争时，那么该线程在后续访问时便会自动获得锁，从而降低获取锁带来的消耗，即提高性能。</p>
+<p>当一个线程访问同步代码块并获取锁时，会在对象头和栈帧中存储偏向锁的线程 ID。在线程进入和退出同步块时不再通过 CAS 操作来加锁和解锁，而是检测对象头的Mark Word 里是否存储着指向当前线程的偏向锁。</p>
+<p>偏向锁使用了一种等到竞争出现才释放的机制，所以当其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁。关于偏向锁的撤销，需要等待全局安全点（即在某个时间点上没有字节码正在执行）。它会先暂停拥有偏向锁的线程，然后判断锁对象是否处于被锁定状态。如果线程不处于活动状态，则将对象头设置成无锁状态，并撤销偏向锁，恢复到无锁或轻量级锁的状态。<br>3.轻量级锁</p>
+<p>轻量级锁是指当锁是偏向锁的时候，却被另外的线程所访问，此时偏向锁就会升级为轻量级锁，其他线程会通过自旋（关于自旋的介绍见文末）的形式尝试获取锁，线程不会阻塞，从而提高性能。</p>
+<p>轻量级锁的获取主要由两种情况：① 当关闭偏向锁功能时；② 由于多个线程竞争偏向锁导致偏向锁升级为轻量级锁。</p>
+<p>轻量级锁加锁</p>
+<p>线程正在执行同步块之前，JVM会先在当前线程的栈帧中创建用于存储锁记录的空间，并将对象头中的Mark Word复制到所记录中。线程尝试使用CAS将对象头中的Mark Word替换为指向锁记录的指针。如果成功，当前线程获得锁，如果失败，表示其他线程竞争锁，当前线程便尝试使用自旋来获取锁。</p>
+<p>使用原子的CAS操作将Displaced Mark Word替换回到对象头，如果成功，则表示没有发生竞争。如果失败，表示竞争存在，锁就会膨胀成重量级锁。</p>
+<p>自旋会消耗CPU，为避免无用自旋，一旦锁升级成重量级，就不会在恢复到轻量级锁状态。当锁处于这个状态下，其他线程试图获取锁时，都会被阻塞住，当持有锁的线程释放锁之后会唤醒这些线程，被唤醒的线程就会进行新一轮的夺锁之争。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/02/redBlackTree/" class="archive-article-date">
-  	<time datetime="2021-12-02T13:47:16.011Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/02/redBlackTree/">hashmap中的红黑树</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/05/01/jvm%E5%AD%A6%E4%B9%A0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/01/hashmap/" class="archive-article-date">
-  	<time datetime="2021-12-01T12:48:50.923Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-01</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2022/05/15/seata%E8%AF%A6%E8%A7%A3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          seata详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/12/17/thread_state/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">java多线程-并发编程的开始</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/01/hashmap/">hashmap</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/30/LinkedList/" class="archive-article-date">
-  	<time datetime="2021-11-30T14:24:51.484Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/30/LinkedList/">LinkedList</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/30/work_chips/" class="archive-article-date">
-  	<time datetime="2021-11-29T16:07:49.432Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/30/work_chips/">碎片</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/29/think_in_java_ArrayList/" class="archive-article-date">
-  	<time datetime="2021-11-29T15:28:53.874Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/29/think_in_java_ArrayList/">ArrayList源码瞎看</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/17/think_in_java_Integer/" class="archive-article-date">
-  	<time datetime="2021-11-17T14:53:56.268Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/17/think_in_java_Integer/">java 包装类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/06/08/springAOP/" class="archive-article-date">
-  	<time datetime="2021-06-08T15:21:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/06/08/springAOP/">springAOP</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" class="archive-article-date">
-  	<time datetime="2021-06-02T12:40:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/">spring启动过程分析</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/05/23/spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" class="archive-article-date">
-  	<time datetime="2021-05-23T14:20:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/05/23/spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/">spring循环依赖</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/05/15/springIoc/" class="archive-article-date">
-  	<time datetime="2021-05-15T11:37:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/05/15/springIoc/">springIoc</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -462,8 +477,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/monsterfaker/monsterfaker.github.io">
-  <title>Archives | like winter</title>
+  <title>redis底层原理 | like winter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="like winter">
-<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/archives/page/2/index.html">
+  <meta name="description" content="开源的基于内存的数据结构存数系统，可以用作数据库、缓存、消息中间件 数据结构redis中所有value都是以redisobject形式存在 type，encoding，数据指针ptr，虚拟内存vm type：raw、int、ziplist、linkelist、hashmap、intset String：redis sds[Simple dynamic String]动态字符串 为什么不用C串1.获">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis底层原理">
+<meta property="og:url" content="https://github.com/monsterfaker/monsterfaker.github.io/2022/06/10/redis%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="like winter">
+<meta property="og:description" content="开源的基于内存的数据结构存数系统，可以用作数据库、缓存、消息中间件 数据结构redis中所有value都是以redisobject形式存在 type，encoding，数据指针ptr，虚拟内存vm type：raw、int、ziplist、linkelist、hashmap、intset String：redis sds[Simple dynamic String]动态字符串 为什么不用C串1.获">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-10T14:00:52.000Z">
+<meta property="article:modified_time" content="2022-10-11T05:42:51.688Z">
 <meta property="article:author" content="tyler_r">
 <meta name="twitter:card" content="summary">
   
@@ -150,295 +154,212 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-redis底层原理" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis底层原理
+    </h1>
+  
+
+        
+        <a href="/2022/06/10/redis%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="archive-article-date">
+  	<time datetime="2022-06-10T14:00:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-10</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>开源的基于内存的数据结构存数系统，可以用作数据库、缓存、消息中间件</p>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>redis中所有value都是以redisobject形式存在</p>
+<p>type，encoding，数据指针ptr，虚拟内存vm</p>
+<p>type：raw、int、ziplist、linkelist、hashmap、intset</p>
+<p>String：redis sds[Simple dynamic String]动态字符串</p>
+<p>为什么不用C串1.获取串长0（N），需要去遍历</p>
+<p>2.不能杜绝缓冲区溢出/内存泄露问题，字符串拼接安全问题</p>
+<p>3.字符数组最后一个元素总是 ‘\0’不好处理</p>
+<p>List：压缩列表ziplist和双向链表linkedlist</p>
+<p>元素少的时候使用ziplist：压缩链表，处于连续内存区域，插入复杂度0（N）每次插入都要重新分配realloc</p>
+<p>​                1、zlbytes:用于记录整个压缩列表占用的内存字节数</p>
+<p>　　　　2、zltail：记录要列表尾节点距离压缩列表的起始地址有多少字节</p>
+<p>　　　　3、zllen：记录了压缩列表包含的节点数量。</p>
+<p>　　　　4、entryX：要说列表包含的各个节点</p>
+<p>　　　　5、zlend：用于标记压缩列表的末端</p>
+<p>quicklist快速列表：ziplist和linkedlist的混合体，它将linkedlist按段切分，每一段使用ziplist来紧凑存储，多个ziplist之间使用双指针串接起来 ；默认每个zplist 8K LZF算法控制压缩深度，默认为0，不压缩</p>
+<p>多的时候使用linkedlist：pre next占用空间太高（16个字节，碎片）</p>
+<p>Hash：底层zplist或者hashtable 基本跟hashmap类似</p>
+<p>set：相当于hashset类型：它内部的键值对是无序、唯一的</p>
+<p>字典中所有的 value 都是一个值 NULL。集合Set类型底层编码包括hashtable和inset。hashtable在上面介绍过了，我们就只介绍inset</p>
+<p>intset底层本质是一个有序的、不重复的、整型的数组、支持不同类型整数</p>
+<p>sortedSet :</p>
+<p>ziplist： 每个集合元素使用两个紧挨在一起的压缩列表节点来保存，第一个节点保存元素的成员（member），而第二个元素则保存元素的分值（score）</p>
+<p>skiplist ：多层次的链表，且每一层链表中的元素是前一层链表元素的子集</p>
+<p>redis三种集群</p>
+<p>1.主从模式</p>
+<p>使用sync 全部同步/psync通信 从断开地方开始</p>
+<p>1.从服务器接收slaveOf   每秒replicationCron</p>
+<p>2.向主服务器发送psync命令</p>
+<p>3.主服务器接收bgsave命令生成rdb文件，并且用缓冲区记录所有开始执行的命令  （如果从节点开启了AOF，则会触发bgrewriteaof的执行，从而保证AOF文件更新至主节点的最新状态）</p>
+<p>4.主发送rdb到从</p>
+<p>5.从服务器开始复制</p>
+<p>6.主服务器把缓存区记录的新命令发送给从服务器</p>
+<p>psync如何实现部分重同步</p>
+<p>主、从都复制一个偏移量，主发送了5就是N+5，从也是n+5，n一致则表示数据一致，有偏差差值是字节数&lt;服务器的复制积压缓冲区，则发送master的复制积压缓冲区，否则进行全部复制</p>
+<p>复制积压缓冲区是由<strong>主节点维护的、固定长度的、先进先出(FIFO)队列</strong></p>
+<p>主服务器都有一个自己的ID，当从重连主，判断是不是一个id,是就判断是不是需要全量复制。不是那就换了主机器，直接全量</p>
+<p>哨兵机制：主从模式不高可用，需要人工切换</p>
+<p>sentinel集群、redis集群</p>
+<p>1.sentinel每隔10s给主发info，获取主从信息，对从建立连接</p>
+<p>2.sentinel每秒给主发送ping，没有收到回复 主管 下线 当&gt;N/2为客观下线</p>
+<p>3.重新选举主节点，通过raft一致性算法</p>
+<p>redis cluster ：总共16384个槽位 通过crc16算法与16384取模计算对应槽位点</p>
+<p>hash slot让node的增加和移除很简单，增加一个master，就将其他master的hash slot移动部分过去，减少一个master，就将它的hash slot移动到其他master上去</p>
+<p>分片 </p>
+<p>1.请求节点，槽位计算，是否当前节点，是则请求，否则返回move错误，转回正确槽位重新请求</p>
+<p>底层原理：</p>
+<p>IO多路复用+文件事件分派器（把对应的事件分派到对应处理器）</p>
+<p>IO多路复用技术（epoll函数模型）：epoll函数模型主要是调用了三个函数：epoll_create() , epoll_ctl() , epoll_wait()；<br>底层流程：①通过epoll_create() 函数创建一个文件，返回一个文件描述符（Linus系统一切对象皆为文件）fd ② 创建socket接口号4，绑定socket号与端口号，监听事件，标记为非阻塞。通过epoll_ctl() 函数将该socket号 以及 需要监听的事件（如listen事件）写入fd中。③循环调用epoll_wait() 函数进行监听，返回已经就绪事件序列的长度（返回0则说明无状态，大于0则说明有n个事件已就绪）。例如如果有客户端进行连接，则，再调用accept()函数与4号socket进行连接，连接后返回一个新的socket号，且需要监听读事件，则再通过epoll_ctl()将新的socket号以及对应的事件（如read读事件）写入fd中，epoll_wait()进行监听。循环往复</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/02/redBlackTree/" class="archive-article-date">
-  	<time datetime="2021-12-02T13:47:16.011Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/02/redBlackTree/">hashmap中的红黑树</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/monsterfaker/monsterfaker.github.io/2022/06/10/redis%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/12/01/hashmap/" class="archive-article-date">
-  	<time datetime="2021-12-01T12:48:50.923Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-01</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2022/07/10/kafka%E8%AF%A6%E8%A7%A3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          kafka详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/05/15/seata%E8%AF%A6%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">seata详解</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/12/01/hashmap/">hashmap</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/30/LinkedList/" class="archive-article-date">
-  	<time datetime="2021-11-30T14:24:51.484Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/30/LinkedList/">LinkedList</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/30/work_chips/" class="archive-article-date">
-  	<time datetime="2021-11-29T16:07:49.432Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/30/work_chips/">碎片</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/29/think_in_java_ArrayList/" class="archive-article-date">
-  	<time datetime="2021-11-29T15:28:53.874Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/29/think_in_java_ArrayList/">ArrayList源码瞎看</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/11/17/think_in_java_Integer/" class="archive-article-date">
-  	<time datetime="2021-11-17T14:53:56.268Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/11/17/think_in_java_Integer/">java 包装类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/06/08/springAOP/" class="archive-article-date">
-  	<time datetime="2021-06-08T15:21:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/06/08/springAOP/">springAOP</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" class="archive-article-date">
-  	<time datetime="2021-06-02T12:40:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/06/02/spring%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/">spring启动过程分析</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/05/23/spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" class="archive-article-date">
-  	<time datetime="2021-05-23T14:20:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/05/23/spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/">spring循环依赖</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/05/15/springIoc/" class="archive-article-date">
-  	<time datetime="2021-05-15T11:37:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/05/15/springIoc/">springIoc</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -462,8 +383,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
